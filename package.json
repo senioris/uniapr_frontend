@@ -6,6 +6,7 @@
   "author": "Senioris",
   "license": "MIT",
   "scripts": {
+    "dev": "webpack serve --config ./webpack.config.dev.js",
     "build": "webpack --config ./webpack.config.production.js",
     "clean": "rimraf dist/*"
   },

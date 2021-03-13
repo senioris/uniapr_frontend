@@ -5,9 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 const MainRouter = () => {
   return (
     <div>
-      <Switch>
-        <Typography>aaaaa</Typography>
-      </Switch>
+     <Typography>aaaaa</Typography>
     </div>
   )
 }

@@ -11,21 +11,28 @@ const htmlWebpackPlugin = new HtmlWebPackPlugin({
 
 const config = {
   mode: "development",
+  devtool: "source-map",
   entry: {
     app: [
-      "webpack-dev-server/client?http://localhost:8080",
-      "webpack/hot/dev-server",
       path.join(CURRENT_WORKING_DIR, "/src/main.tsx"),
     ],
   },
   output: {
     path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
-    filename: "bundle.js",
+    filename: "bundle.[chunkhash].js",
     publicPath: "/dist/",
+  },
+  devServer: {
+    contentBase: path.join(CURRENT_WORKING_DIR, "/dist/client"),
+    historyApiFallback: true,
+    port: 3355,
+    inline: true,
+    hot: true,
+    writeToDisk: true,
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-    modules: [path.resolve(__dirname, "client"), "node_modules"],
+    modules: [path.resolve(__dirname, "src"), "node_modules"],
   },
   module: {
     rules: [
@@ -45,6 +52,9 @@ const config = {
   plugins: [
     htmlWebpackPlugin,
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      debug: true,
+    }),
   ],
 };
 
