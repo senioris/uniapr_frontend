@@ -28,6 +28,13 @@ const config = {
     port: 3355,
     inline: true,
     hot: true,
+    proxy: {
+      '/api/**': {
+        target: 'http://localhost:3000',
+        secure: false,
+        logLevel: 'debug'
+      }
+    }
     // writeToDisk: true,
   },
   resolve: {

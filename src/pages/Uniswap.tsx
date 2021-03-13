@@ -4,8 +4,6 @@ import AprList from '../components/AprList'
 
 export default function Uniswap() {
   return (
-    <Card>
-      <AprList name="uniswap" />
-    </Card>
+    <AprList name="UniswapV2" />
   )
 }

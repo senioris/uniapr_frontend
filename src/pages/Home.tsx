@@ -118,17 +118,6 @@ const drawerIcon = (name: string) => {
   }
 }
 
-const onListIconClick = (name: string) => () => {
-  switch (name) {
-    case 'Uniswap':
-      
-    case 'SushiSwap':
-    default:
-      break
-  }
-}
-
-
 export default function Home() {
   const classes = useStyles();
   const theme = useTheme();
