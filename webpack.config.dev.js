@@ -20,7 +20,7 @@ const config = {
   output: {
     path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
     filename: "bundle.[chunkhash].js",
-    publicPath: "/dist/",
+    // publicPath: "/dist/",
   },
   devServer: {
     contentBase: path.join(CURRENT_WORKING_DIR, "/dist/client"),
@@ -28,7 +28,7 @@ const config = {
     port: 3355,
     inline: true,
     hot: true,
-    writeToDisk: true,
+    // writeToDisk: true,
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
