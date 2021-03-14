@@ -2,14 +2,6 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { pink } from '@material-ui/core/colors'
 
 declare module '@material-ui/core/styles/createPalette' {
-    export interface Palette {
-        openTitle: string
-        protectedTitle: string
-    }
-    export interface PaletteOptions {
-        openTitle: string
-        protectedTitle: string
-    }
 }
 
 export const theme = createMuiTheme({
@@ -26,8 +18,6 @@ export const theme = createMuiTheme({
             dark: '#c60055',
             contrastText: '#000',
         },
-        openTitle: '#3f4771',
-        protectedTitle: pink['400'],
         type: 'light'
     }
 })

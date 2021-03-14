@@ -1,5 +1,4 @@
 import * as React from 'react';
-import clsx from 'clsx';
 import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,52 +8,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link'
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import { ListApi } from '../api/ListApi';
-import { IHistory } from '../commons/history.types';
+import { IHistory, HistorySchemaDefine } from '../commons/history.types';
 
 type AprListProps = {
-  name: string
-}
-
-interface Data {
-  name: string;
-  liquidity: number;
-  volue: number;
-  apr_day: number;
-  apr_week: number;
-}
-
-function createData(
   name: string,
-  liquidity: number,
-  volue: number,
-  apr_day: number,
-  apr_week: number): Data {
-  return { name, liquidity, volue, apr_day, apr_week };
+  url: string
 }
-
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -68,10 +31,10 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
+function getComparator<Key extends keyof IHistory>(
   order: Order,
   orderBy: Key,
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
+): (a: IHistory, b: IHistory) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -88,124 +51,74 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 }
 
 interface HeadCell {
-  id: keyof Data;
+  id: keyof IHistory;
   label: string;
   numeric: boolean;
+  padding: boolean;
 }
 
 const headCells: HeadCell[] = [
-  { id: 'name', numeric: false, label: 'Name' },
-  { id: 'liquidity', numeric: true, label: 'Liquidity' },
-  { id: 'volue', numeric: true, label: 'Volume(24hrs)' },
-  { id: 'apr_day', numeric: true, label: 'APR(24hrs volume)' },
-  { id: 'apr_week', numeric: true, label: 'APR(7d volume)' },
+  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: '', padding: true },
+  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false },
+  { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true },
+  { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true },
+  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs volume)', padding: true },
+  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d volume)', padding: true },
 ];
 
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof IHistory) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+  const { classes, order, orderBy, rowCount, onRequestSort } = props;
+  const createSortHandler = (property: keyof IHistory) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
+
+  const createLabel = (headCell: HeadCell) => {
+    if (headCell.numeric) {
+      return (
+        <TableSortLabel
+          active={orderBy === headCell.id}
+          direction={orderBy === headCell.id ? order : 'desc'}
+          onClick={createSortHandler(headCell.id)}
+        >
+          {headCell.label}
+          {orderBy === headCell.id ? (
+            <span className={classes.visuallyHidden}>
+              {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+            </span>
+          ) : null}
+        </TableSortLabel>
+      )
+    } else {
+      return headCell.label
+    }
+
+  }
 
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
+            padding={headCell.padding ? "default" : "none"}
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
+            {createLabel(headCell)}
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
   );
 }
-
-const useToolbarStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
-    },
-    highlight:
-      theme.palette.type === 'light'
-        ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-        : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-    title: {
-      flex: '1 1 100%',
-    },
-  }),
-);
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
-
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -230,16 +143,18 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 20,
       width: 1,
     },
+    bold: {
+      fontWeight: 'bolder'
+    }
   }),
 );
 
 export default function AprList(props: AprListProps) {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
-  const [selected, setSelected] = React.useState<string[]>([]);
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<keyof IHistory>(HistorySchemaDefine.RESERVED_USD);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const [history, setHistory] = React.useState<IHistory[]>([])
 
@@ -257,39 +172,10 @@ export default function AprList(props: AprListProps) {
     }
   }, [])
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof IHistory) => {
+    const isDesc = orderBy === property && order === 'desc';
+    setOrder(isDesc ? 'asc' : 'desc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -301,15 +187,12 @@ export default function AprList(props: AprListProps) {
     setPage(0);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, history.length - page * rowsPerPage);
 
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -319,37 +202,36 @@ export default function AprList(props: AprListProps) {
           >
             <EnhancedTableHead
               classes={classes}
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={history.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort<IHistory>(history, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
+                  let baseIndex = page * rowsPerPage
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
-                      aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
+                      key={row.pairName}
                     >
-                      <TableCell component="th" scope="row">
-                        {row.name}
+                      <TableCell size="small">{baseIndex + index}</TableCell>
+                      <TableCell component="th" scope="row" padding="none">
+                        <Link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={props.url + row.pairId}
+                          className={classes.bold}>{row.pairName}
+                        </Link>
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{'$' + row.reserveUSD.toLocaleString()}</TableCell>
+                      <TableCell align="right">{'$' + row.volumeUSD.toLocaleString()}</TableCell>
+                      <TableCell align="right">{row.apr + '%'}</TableCell>
+                      <TableCell align="right">{row.aprWeek + '%'}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -362,9 +244,9 @@ export default function AprList(props: AprListProps) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[25, 50, 100]}
           component="div"
-          count={rows.length}
+          count={history.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

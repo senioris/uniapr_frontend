@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CopyFilePlugin = require("copy-webpack-plugin");
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -10,9 +11,7 @@ const htmlWebpackPlugin = new HtmlWebPackPlugin({
 
 const config = {
   mode: "production",
-  entry: [
-    path.join(CURRENT_WORKING_DIR, "/src/main.tsx")
-  ],
+  entry: [path.join(CURRENT_WORKING_DIR, "/src/main.tsx")],
   output: {
     path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
     filename: "bundle.js",
@@ -20,7 +19,7 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-    modules: [path.resolve(__dirname, "client"), "node_modules"],
+    modules: [path.resolve(__dirname, "src"), "node_modules"],
   },
   module: {
     rules: [
@@ -38,7 +37,19 @@ const config = {
     ],
   },
   plugins: [
-    htmlWebpackPlugin
+    htmlWebpackPlugin,
+    new CopyFilePlugin(
+      {
+        patterns: [
+          {
+            context: "src/assets",
+            from: "**/*.ico",
+            to: path.resolve(__dirname, "dist/client/"),
+          },
+        ],
+      },
+      { copyUnmodified: true }
+    ),
   ],
 };
 

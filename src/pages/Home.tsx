@@ -15,11 +15,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import UniswapIcon from '../assets/uniswap-uni-logo.svg'
 import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg'
-import SvgIcon from '@material-ui/core/SvgIcon';
 import { Avatar } from '@material-ui/core';
 import HomeRooter from './HomeRooter';
 import { Link } from 'react-router-dom'
@@ -37,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
+    },
+    title: {
+      flexGrow: 1,
     },
     appBarShift: {
       marginLeft: drawerWidth,
@@ -118,6 +118,10 @@ const drawerIcon = (name: string) => {
   }
 }
 
+const lastUpdate = () => {
+
+}
+
 export default function Home() {
   const classes = useStyles();
   const theme = useTheme();
@@ -152,8 +156,11 @@ export default function Home() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Ethereum defi APR
+          <Typography variant="h6" noWrap className={classes.title}>
+            AMM DEX APR
+          </Typography>
+          <Typography>
+            Lastupdate
           </Typography>
         </Toolbar>
       </AppBar>

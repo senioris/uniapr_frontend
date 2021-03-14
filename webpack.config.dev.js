@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const webpack = require('webpack')
+const CopyFilePlugin = require("copy-webpack-plugin");
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -13,9 +14,7 @@ const config = {
   mode: "development",
   devtool: "source-map",
   entry: {
-    app: [
-      path.join(CURRENT_WORKING_DIR, "/src/main.tsx"),
-    ],
+    app: [path.join(CURRENT_WORKING_DIR, "/src/main.tsx")],
   },
   output: {
     path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
@@ -29,12 +28,12 @@ const config = {
     inline: true,
     hot: true,
     proxy: {
-      '/api/**': {
-        target: 'http://localhost:3000',
+      "/api/**": {
+        target: "http://localhost:3000",
         secure: false,
-        logLevel: 'debug'
-      }
-    }
+        logLevel: "debug",
+      },
+    },
     // writeToDisk: true,
   },
   resolve: {
@@ -62,6 +61,18 @@ const config = {
     new webpack.LoaderOptionsPlugin({
       debug: true,
     }),
+    new CopyFilePlugin(
+      {
+        patterns: [
+          {
+            context: "src/assets",
+            from: "**/*.ico",
+            to: path.resolve(__dirname, "dist/client/"),
+          },
+        ],
+      },
+      { copyUnmodified: true }
+    ),
   ],
 };
 
