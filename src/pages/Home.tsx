@@ -159,9 +159,6 @@ export default function Home() {
           <Typography variant="h6" noWrap className={classes.title}>
             AMM DEX APR
           </Typography>
-          <Typography>
-            Lastupdate
-          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer

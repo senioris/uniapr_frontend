@@ -13,10 +13,14 @@ import Link from '@material-ui/core/Link'
 import Paper from '@material-ui/core/Paper';
 import { ListApi } from '../api/ListApi';
 import { IHistory, HistorySchemaDefine } from '../commons/history.types';
+import { dexAction, DexState } from '../redux/Dex';
+import { appAction, AppActionType } from '../redux/App'
+import { useDispatch } from 'react-redux';
 
 type AprListProps = {
   name: string,
-  url: string
+  url: string,
+  state: DexState
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -51,14 +55,14 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 }
 
 interface HeadCell {
-  id: keyof IHistory;
+  id: keyof IHistory | String;
   label: string;
   numeric: boolean;
   padding: boolean;
 }
 
 const headCells: HeadCell[] = [
-  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: '', padding: true },
+  { id: "empty", numeric: false, label: '', padding: true },
   { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false },
   { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true },
   { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true },
@@ -86,7 +90,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableSortLabel
           active={orderBy === headCell.id}
           direction={orderBy === headCell.id ? order : 'desc'}
-          onClick={createSortHandler(headCell.id)}
+          onClick={createSortHandler(headCell.id as keyof IHistory)}
         >
           {headCell.label}
           {orderBy === headCell.id ? (
@@ -108,7 +112,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             padding={headCell.padding ? "default" : "none"}
-            key={headCell.id}
+            key={headCell.id as React.Key}
             align={headCell.numeric ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -156,16 +160,24 @@ export default function AprList(props: AprListProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
-  const [history, setHistory] = React.useState<IHistory[]>([])
-
+  const dispatch = useDispatch()
 
   React.useEffect(() => {
     const abortController = new AbortController()
-    const signal = abortController.signal
+    if (!props.state.isLoaded) {
+      const signal = abortController.signal
+      ListApi.list(props.name, signal).then((data) => {
+        dispatch(dexAction(props.name, { isLoaded: true, data: data }))
 
-    ListApi.list(props.name, signal).then((data) => {
-      setHistory(data)
-    })
+        if (data[0].created) {
+          let date = new Date(data[0].created)
+          dispatch(appAction(AppActionType.ACTION_LASTUPDATE, {
+            lastUpdate: date.toLocaleDateString(),
+            isDark: false
+          }))
+        }
+      })
+    }
 
     return () => {
       abortController.abort()
@@ -187,7 +199,13 @@ export default function AprList(props: AprListProps) {
     setPage(0);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, history.length - page * rowsPerPage);
+  if (!props.state.isLoaded) {
+    return (
+      <div/>
+    )
+  }
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.state.data.length - page * rowsPerPage);
 
 
   return (
@@ -205,17 +223,16 @@ export default function AprList(props: AprListProps) {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={history.length}
+              rowCount={props.state.data.length}
             />
             <TableBody>
-              {stableSort<IHistory>(history, getComparator(order, orderBy))
+              {stableSort<IHistory>(props.state.data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  let baseIndex = page * rowsPerPage
+                  let baseIndex = page * rowsPerPage + 1
                   return (
                     <TableRow
                       hover
-                      role="checkbox"
                       tabIndex={-1}
                       key={row.pairName}
                     >
@@ -246,7 +263,7 @@ export default function AprList(props: AprListProps) {
         <TablePagination
           rowsPerPageOptions={[25, 50, 100]}
           component="div"
-          count={history.length}
+          count={props.state.data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
