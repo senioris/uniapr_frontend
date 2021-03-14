@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(1),
     },
     donate: {
-      paddingTop: theme.spacing(1)
+      paddingTop: theme.spacing(1),
     },
   }),
 );
@@ -227,11 +227,7 @@ export default function Home() {
             </div>
             <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
               target="_blank" rel="noopener noreferrer" className={classes.donate}>
-              <Typography variant="button">Donate</Typography>
-            </MaterialLink>
-            <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
-              target="_blank" rel="noopener noreferrer" className={classes.donate}>
-              <Typography variant="button">Donate</Typography>
+              Donate
             </MaterialLink>
           </div>
         </div>

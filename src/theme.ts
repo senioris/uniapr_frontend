@@ -11,7 +11,7 @@ export const theme = (state: AppState) => {
             palette: {
                 primary: {
                     light: '#5c67a3',
-                    main: '#3f4771',
+                    main: state.isDark ? '#a1046d' : '#004771',
                     dark: '#2e355b',
                     contrastText: '#fff'
                 },
