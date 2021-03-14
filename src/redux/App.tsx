@@ -24,16 +24,18 @@ export const appAction = (action: AppActionType, payload: AppState) => {
 }
 
 const initialState: AppState  = {
-  isDark: false,
+  isDark: localStorage.getItem('darkmode') == "1" ? true : false,
   lastUpdate: ""
 }
 
 export const appReducer = (state: AppState = initialState, action: AppAction): AppState => {
   switch (action.type) {
     case AppActionType.ACTION_DARKMODE:
+      const isDark = action.payload.isDark
+      localStorage.setItem('darkmode', isDark ? "1" : "0");
       return {
         ...state,
-        isDark: action.payload.isDark,
+        isDark: isDark,
       }
     case AppActionType.ACTION_LASTUPDATE:
       return {

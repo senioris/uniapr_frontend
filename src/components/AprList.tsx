@@ -148,7 +148,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 1,
     },
     bold: {
-      fontWeight: 'bolder'
+      fontWeight: 'bolder',
+      color: "inherit"
     }
   }),
 );

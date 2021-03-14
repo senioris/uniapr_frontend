@@ -17,9 +17,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import UniswapIcon from '../assets/uniswap-uni-logo.svg'
 import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg'
-import { Avatar } from '@material-ui/core';
+import { Avatar, Switch } from '@material-ui/core';
 import HomeRooter from './HomeRooter';
 import { Link } from 'react-router-dom'
+import { Link as MaterialLink } from '@material-ui/core'
+import { NightsStayTwoTone as NightsStayIcon } from '@material-ui/icons'
+import { useDispatch, useSelector } from 'react-redux';
+import { appAction, AppActionType, AppState } from '../redux/App';
+import { AllState } from '../redux/All';
 
 const drawerWidth = 240;
 
@@ -91,6 +96,27 @@ const useStyles = makeStyles((theme: Theme) =>
       width: theme.spacing(3),
       height: theme.spacing(3),
     },
+    bottomMenu: {
+      position: 'absolute',
+      bottom: 0,
+      width: drawerWidth - theme.spacing(2)
+    },
+    inline: {
+      display: 'flex',
+    },
+    nightSwitch: {
+      display: 'flex',
+      flexGrow: 1,
+    },
+    nightIcon: {
+      width: 40,
+      height: 40,
+      paddingBottom: theme.spacing(1),
+      paddingLeft: theme.spacing(1),
+    },
+    donate: {
+      paddingTop: theme.spacing(1)
+    },
   }),
 );
 
@@ -118,10 +144,6 @@ const drawerIcon = (name: string) => {
   }
 }
 
-const lastUpdate = () => {
-
-}
-
 export default function Home() {
   const classes = useStyles();
   const theme = useTheme();
@@ -134,6 +156,15 @@ export default function Home() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const stateApp = useSelector<AllState, AppState>(state => state.app)
+  const dispatch = useDispatch()
+  const handleNightSwitchChanged = () => {
+    dispatch(appAction(AppActionType.ACTION_DARKMODE, {
+      lastUpdate: "",
+      isDark: !stateApp.isDark
+    }))
+  }
 
   return (
     <div className={classes.root}>
@@ -188,6 +219,22 @@ export default function Home() {
             </ListItem>
           ))}
         </List>
+        <div className={classes.bottomMenu}>
+          <div className={classes.inline}>
+            <div className={classes.nightSwitch}>
+              <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
+              <NightsStayIcon className={classes.nightIcon} />
+            </div>
+            <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
+              target="_blank" rel="noopener noreferrer" className={classes.donate}>
+              <Typography variant="button">Donate</Typography>
+            </MaterialLink>
+            <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
+              target="_blank" rel="noopener noreferrer" className={classes.donate}>
+              <Typography variant="button">Donate</Typography>
+            </MaterialLink>
+          </div>
+        </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
