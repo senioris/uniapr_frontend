@@ -27,6 +27,7 @@ const config = {
     port: 3355,
     inline: true,
     hot: true,
+    host: '0.0.0.0',
     proxy: {
       "/api/**": {
         target: "http://localhost:3000",

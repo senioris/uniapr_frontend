@@ -17,7 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import UniswapIcon from '../assets/uniswap-uni-logo.svg'
 import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg'
-import { Avatar, Switch } from '@material-ui/core';
+import { Avatar, Hidden, Switch, useMediaQuery } from '@material-ui/core';
 import HomeRooter from './HomeRooter';
 import { Link } from 'react-router-dom'
 import { Link as MaterialLink } from '@material-ui/core'
@@ -25,6 +25,7 @@ import { NightsStayTwoTone as NightsStayIcon } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux';
 import { appAction, AppActionType, AppState } from '../redux/App';
 import { AllState } from '../redux/All';
+import { inherits } from 'node:util';
 
 const drawerWidth = 240;
 
@@ -44,12 +45,14 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+      },
     },
     menuButton: {
       marginRight: 36,
@@ -79,6 +82,9 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('sm')]: {
         width: theme.spacing(8) + 1,
       },
+    },
+    drawerPaper: {
+      width: drawerWidth,
     },
     toolbar: {
       display: 'flex',
@@ -117,44 +123,35 @@ const useStyles = makeStyles((theme: Theme) =>
     donate: {
       paddingTop: theme.spacing(1),
     },
+    link: {
+      textDecoration: 'none',
+      color: "inherit",
+    }
   }),
 );
-
-const drawerIcon = (name: string) => {
-  const classes = useStyles();
-  switch (name) {
-    case 'Uniswap':
-      return (
-        <Link to="/uniswap" replace>
-          <ListItemIcon>
-            <Avatar src={UniswapIcon} className={classes.listIcon} />
-          </ListItemIcon>
-        </Link>
-      )
-    case 'SushiSwap':
-      return (
-        <Link to="/sushiswap" replace>
-          <ListItemIcon>
-            <Avatar src={SushiswapIcon} className={classes.listIcon} />
-          </ListItemIcon>
-        </Link>
-      )
-    default:
-      return ""
-  }
-}
 
 export default function Home() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    if (isBrowser) {
+      setOpen(true);
+    } else {
+      setMobileOpen(true)
+    }
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setMobileOpen(false)
+  };
+
+  const handleMobileDrawerClose = () => {
+    setMobileOpen(false)
   };
 
   const stateApp = useSelector<AllState, AppState>(state => state.app)
@@ -165,6 +162,56 @@ export default function Home() {
       isDark: !stateApp.isDark
     }))
   }
+
+  const drawer = () => {
+    return (
+      <div>
+        <div className={classes.toolbar}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {['Uniswap', 'SushiSwap'].map((text, index) => (
+            drawerListItem(text)
+          ))}
+        </List>
+      </div>
+    ) 
+  }
+
+  const drawerListItem = (name: string) => {
+    const classes = useStyles();
+    switch (name) {
+      case 'Uniswap':
+        return (
+          <Link to="/uniswap" replace className={classes.link} onClick={handleMobileDrawerClose} key={name}>
+            <ListItem button key={name}>
+              <ListItemIcon>
+                <Avatar src={UniswapIcon} className={classes.listIcon} />
+              </ListItemIcon>
+              <ListItemText primary={name} />
+            </ListItem>
+          </Link>
+        )
+      case 'SushiSwap':
+        return (
+          <Link to="/sushiswap" replace className={classes.link} onClick={handleMobileDrawerClose} key={name}>
+            <ListItem button key={name}>
+              <ListItemIcon>
+                <Avatar src={SushiswapIcon} className={classes.listIcon} />
+              </ListItemIcon>
+              <ListItemText primary={name} />
+            </ListItem>
+          </Link>
+        )
+      default:
+        return ""
+    }
+  }
+
+  const container = window !== undefined ? () => window.document.body : undefined;
 
   return (
     <div className={classes.root}>
@@ -192,46 +239,51 @@ export default function Home() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
+      <Hidden smUp implementation="css">
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerClose}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          {drawer()}
+        </Drawer>
+      </Hidden>
+      <Hidden xsDown implementation="css">
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {['Uniswap', 'SushiSwap'].map((text, index) => (
-            <ListItem button key={text}>
-              {drawerIcon(text)}
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <div className={classes.bottomMenu}>
-          <div className={classes.inline}>
-            <div className={classes.nightSwitch}>
-              <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
-              <NightsStayIcon className={classes.nightIcon} />
-            </div>
-            <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
-              target="_blank" rel="noopener noreferrer" className={classes.donate}>
-              Donate
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            }),
+          }}
+        >
+          {drawer()}
+          <div className={classes.bottomMenu}>
+            <div className={classes.inline}>
+              <div className={classes.nightSwitch}>
+                <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
+                <NightsStayIcon className={classes.nightIcon} />
+              </div>
+              <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
+                target="_blank" rel="noopener noreferrer" className={classes.donate}>
+                Donate
             </MaterialLink>
+            </div>
           </div>
-        </div>
-      </Drawer>
+        </Drawer>
+      </Hidden>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <HomeRooter />

@@ -218,6 +218,13 @@ export default function AprList(props: AprListProps) {
             size='medium'
             aria-label="enhanced table"
           >
+            <colgroup>
+              <col width="20px" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+            </colgroup>
             <EnhancedTableHead
               classes={classes}
               order={order}
@@ -261,7 +268,7 @@ export default function AprList(props: AprListProps) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[25, 50, 100]}
+          rowsPerPageOptions={[5, 25, 50, 100]}
           component="div"
           count={props.state.data.length}
           rowsPerPage={rowsPerPage}
