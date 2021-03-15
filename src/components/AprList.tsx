@@ -14,8 +14,9 @@ import Paper from '@material-ui/core/Paper';
 import { ListApi } from '../api/ListApi';
 import { IHistory, HistorySchemaDefine } from '../commons/history.types';
 import { dexAction, DexState } from '../redux/Dex';
-import { appAction, AppActionType } from '../redux/App'
-import { useDispatch } from 'react-redux';
+import { appAction, AppActionType, AppState } from '../redux/App'
+import { useDispatch, useSelector } from 'react-redux';
+import { AllState } from '../redux/All';
 
 type AprListProps = {
   name: string,
@@ -158,7 +159,8 @@ export default function AprList(props: AprListProps) {
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof IHistory>(HistorySchemaDefine.RESERVED_USD);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+
+  const stateApp = useSelector<AllState, AppState>(state => state.app)
 
   const dispatch = useDispatch()
 
@@ -173,7 +175,8 @@ export default function AprList(props: AprListProps) {
           let date = new Date(data[0].created)
           dispatch(appAction(AppActionType.ACTION_LASTUPDATE, {
             lastUpdate: date.toLocaleDateString(),
-            isDark: false
+            isDark: false,
+            rowsPerPage: 0
           }))
         }
       })
@@ -195,7 +198,11 @@ export default function AprList(props: AprListProps) {
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    dispatch(appAction(AppActionType.ACTION_ROWPERPAGE, {
+      lastUpdate: "",
+      isDark: false,
+      rowsPerPage: parseInt(event.target.value, 10)
+    }))
     setPage(0);
   };
 
@@ -205,6 +212,7 @@ export default function AprList(props: AprListProps) {
     )
   }
 
+  const rowsPerPage = stateApp.rowsPerPage
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.state.data.length - page * rowsPerPage);
 
 

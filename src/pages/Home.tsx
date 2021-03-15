@@ -159,7 +159,8 @@ export default function Home() {
   const handleNightSwitchChanged = () => {
     dispatch(appAction(AppActionType.ACTION_DARKMODE, {
       lastUpdate: "",
-      isDark: !stateApp.isDark
+      isDark: !stateApp.isDark,
+      rowsPerPage: 0
     }))
   }
 
