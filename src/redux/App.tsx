@@ -27,7 +27,7 @@ export const appAction = (action: AppActionType, payload: AppState) => {
 
 const initialState: AppState  = {
   isDark: localStorage.getItem('darkmode') == "1" ? true : false,
-  rowsPerPage: Number(localStorage.getItem('rowsPerPage')),
+  rowsPerPage: Number(localStorage.getItem('rowsPerPage')) >= 1 ? Number(localStorage.getItem('rowsPerPage')) : 5,
   lastUpdate: ""
 }
 
