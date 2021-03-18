@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import * as React from 'react';
 import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -17,6 +18,7 @@ import { dexAction, DexState } from '../redux/Dex';
 import { appAction, AppActionType, AppState } from '../redux/App'
 import { useDispatch, useSelector } from 'react-redux';
 import { AllState } from '../redux/All';
+import { useMediaQuery, useTheme } from '@material-ui/core';
 
 type AprListProps = {
   name: string,
@@ -60,15 +62,18 @@ interface HeadCell {
   label: string;
   numeric: boolean;
   padding: boolean;
+  maxWidth: number;
+  width: number | string;
+  mobileDisplay: boolean
 }
 
 const headCells: HeadCell[] = [
-  { id: "empty", numeric: false, label: '', padding: true },
-  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false },
-  { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true },
-  { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true },
-  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs volume)', padding: true },
-  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d volume)', padding: true },
+  { id: "empty", numeric: false, label: '', padding: true, maxWidth: 50, width: "10%", mobileDisplay: true },
+  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false, maxWidth: 150, width: "20%", mobileDisplay: true },
+  { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true },
+  { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false },
+  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false },
+  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true },
 ];
 
 interface EnhancedTableProps {
@@ -107,6 +112,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
   }
 
+  const theme = useTheme();
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'));
+
   return (
     <TableHead>
       <TableRow>
@@ -116,6 +124,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             key={headCell.id as React.Key}
             align={headCell.numeric ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{
+              maxWidth: headCell.maxWidth,
+              width: headCell.width,
+              display: displayProperty(isBrowser, headCell.mobileDisplay)
+            }}
           >
             {createLabel(headCell)}
           </TableCell>
@@ -123,6 +136,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       </TableRow>
     </TableHead>
   );
+}
+
+const displayProperty = (isBrowser: boolean, isMobile: boolean): string => {
+  if (isBrowser || isMobile) {
+    return "table-cell"
+  } else {
+    return "none"
+  }
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -135,7 +156,13 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     table: {
-      minWidth: 750,
+      [theme.breakpoints.up('sm')]: {
+        minWidth: 750,
+      },
+      [theme.breakpoints.down('xs')]: {
+        minWidth: 320,
+      },
+      tableLayout: "fixed",
     },
     visuallyHidden: {
       border: 0,
@@ -150,12 +177,19 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     bold: {
       fontWeight: 'bolder',
-    }
+    },
+    pairName: {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+    },
   }),
 );
 
 export default function AprList(props: AprListProps) {
   const classes = useStyles();
+  const theme = useTheme();
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'));
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof IHistory>(HistorySchemaDefine.RESERVED_USD);
   const [page, setPage] = React.useState(0);
@@ -208,7 +242,7 @@ export default function AprList(props: AprListProps) {
 
   if (!props.state.isLoaded) {
     return (
-      <div/>
+      <div />
     )
   }
 
@@ -226,13 +260,6 @@ export default function AprList(props: AprListProps) {
             size='medium'
             aria-label="enhanced table"
           >
-            <colgroup>
-              <col width="20px" />
-              <col width="20%" />
-              <col width="20%" />
-              <col width="20%" />
-              <col width="20%" />
-            </colgroup>
             <EnhancedTableHead
               classes={classes}
               order={order}
@@ -251,8 +278,17 @@ export default function AprList(props: AprListProps) {
                       tabIndex={-1}
                       key={row.pairName}
                     >
-                      <TableCell size="small">{baseIndex + index}</TableCell>
-                      <TableCell component="th" scope="row" padding="none">
+                      <TableCell
+                        size="small"
+                        style={{ display: displayProperty(isBrowser, true) }}>
+                        {baseIndex + index}
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        padding="none"
+                        className={classes.pairName}
+                        style={{ display: displayProperty(isBrowser, true) }}>
                         <Link
                           target="_blank"
                           rel="noopener noreferrer"
@@ -260,10 +296,26 @@ export default function AprList(props: AprListProps) {
                           className={classes.bold}>{row.pairName}
                         </Link>
                       </TableCell>
-                      <TableCell align="right">{'$' + row.reserveUSD.toLocaleString()}</TableCell>
-                      <TableCell align="right">{'$' + row.volumeUSD.toLocaleString()}</TableCell>
-                      <TableCell align="right">{row.apr + '%'}</TableCell>
-                      <TableCell align="right">{row.aprWeek + '%'}</TableCell>
+                      <TableCell
+                        align="right"
+                        style={{ display: displayProperty(isBrowser, true) }}>
+                        {'$' + row.reserveUSD.toLocaleString()}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        style={{ display: displayProperty(isBrowser, false) }}>
+                        {'$' + row.volumeUSD.toLocaleString()}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        style={{ display: displayProperty(isBrowser, false) }}>
+                        {row.apr + '%'}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        style={{ display: displayProperty(isBrowser, true) }}>
+                        {row.aprWeek + '%'}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -283,6 +335,7 @@ export default function AprList(props: AprListProps) {
           page={page}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
+          labelRowsPerPage="Rows"
         />
       </Paper>
     </div>

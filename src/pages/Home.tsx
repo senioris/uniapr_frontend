@@ -178,6 +178,18 @@ export default function Home() {
             drawerListItem(text)
           ))}
         </List>
+        <div className={classes.bottomMenu}>
+          <div className={classes.inline}>
+            <div className={classes.nightSwitch}>
+              <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
+              <NightsStayIcon className={classes.nightIcon} />
+            </div>
+            <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
+              target="_blank" rel="noopener noreferrer" className={classes.donate}>
+              Donate
+            </MaterialLink>
+          </div>
+        </div>
       </div>
     ) 
   }
@@ -271,18 +283,6 @@ export default function Home() {
           }}
         >
           {drawer()}
-          <div className={classes.bottomMenu}>
-            <div className={classes.inline}>
-              <div className={classes.nightSwitch}>
-                <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
-                <NightsStayIcon className={classes.nightIcon} />
-              </div>
-              <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
-                target="_blank" rel="noopener noreferrer" className={classes.donate}>
-                Donate
-            </MaterialLink>
-            </div>
-          </div>
         </Drawer>
       </Hidden>
       <main className={classes.content}>
