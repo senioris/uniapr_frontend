@@ -203,7 +203,7 @@ export default function AprList(props: AprListProps) {
       ListApi.list(props.name, signal).then((data) => {
         dispatch(dexAction(props.name, { isLoaded: true, data: data }))
 
-        if (data[0].created) {
+        if (data && data.length > 0 &&  data[0].created) {
           let date = new Date(data[0].created)
           dispatch(appAction(AppActionType.ACTION_LASTUPDATE, {
             lastUpdate: date.toLocaleDateString(),
