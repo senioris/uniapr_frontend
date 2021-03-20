@@ -25,7 +25,7 @@ import { NightsStayTwoTone as NightsStayIcon } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux';
 import { appAction, AppActionType, AppState } from '../redux/App';
 import { AllState } from '../redux/All';
-import { inherits } from 'node:util';
+import TwitterIcon from '../assets/twitter_icon.svg';
 
 const drawerWidth = 240;
 
@@ -126,7 +126,12 @@ const useStyles = makeStyles((theme: Theme) =>
     link: {
       textDecoration: 'none',
       color: "inherit",
-    }
+    },
+    twitter: {
+      marginLeft: 20,
+      width: 24,
+      height: 24,
+    },
   }),
 );
 
@@ -165,6 +170,14 @@ export default function Home() {
   }
 
   const drawer = () => {
+
+    const twitter =  (
+      <MaterialLink href="https://twitter.com/SeniorisCold"
+        target="_blank" rel="noopener noreferrer">
+        <img src={TwitterIcon} className={classes.twitter} />
+      </MaterialLink>
+    )
+
     return (
       <div>
         <div className={classes.toolbar}>
@@ -179,6 +192,7 @@ export default function Home() {
           ))}
         </List>
         <div className={classes.bottomMenu}>
+          {twitter}
           <div className={classes.inline}>
             <div className={classes.nightSwitch}>
               <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
