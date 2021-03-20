@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import AprList from "../components/AprList";
@@ -32,6 +33,8 @@ export default function Sushiswap() {
 
   return (
     <div>
+      <Alert severity="info">These APR does not calculate impermanent loss.</Alert>
+      
       <div className={classes.titleArea}>
         <Typography className={classes.title} variant="h6">Sushiswap</Typography>
         {lastUpdate(stateApp.lastUpdate)}

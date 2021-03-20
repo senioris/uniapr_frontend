@@ -18,7 +18,7 @@ import { dexAction, DexState } from '../redux/Dex';
 import { appAction, AppActionType, AppState } from '../redux/App'
 import { useDispatch, useSelector } from 'react-redux';
 import { AllState } from '../redux/All';
-import { useMediaQuery, useTheme } from '@material-ui/core';
+import { Hidden, useMediaQuery, useTheme } from '@material-ui/core';
 
 type AprListProps = {
   name: string,
@@ -279,16 +279,14 @@ export default function AprList(props: AprListProps) {
                       key={row.pairName}
                     >
                       <TableCell
-                        size="small"
-                        style={{ display: displayProperty(isBrowser, true) }}>
+                        size="small">
                         {baseIndex + index}
                       </TableCell>
                       <TableCell
                         component="th"
                         scope="row"
                         padding="none"
-                        className={classes.pairName}
-                        style={{ display: displayProperty(isBrowser, true) }}>
+                        className={classes.pairName}>
                         <Link
                           target="_blank"
                           rel="noopener noreferrer"
@@ -296,24 +294,20 @@ export default function AprList(props: AprListProps) {
                           className={classes.bold}>{row.pairName}
                         </Link>
                       </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{ display: displayProperty(isBrowser, true) }}>
+                      <TableCell align="right">
                         {'$' + row.reserveUSD.toLocaleString()}
                       </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{ display: displayProperty(isBrowser, false) }}>
-                        {'$' + row.volumeUSD.toLocaleString()}
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{ display: displayProperty(isBrowser, false) }}>
-                        {row.apr + '%'}
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{ display: displayProperty(isBrowser, true) }}>
+                      <Hidden xsDown>
+                        <TableCell align="right">
+                          {'$' + row.volumeUSD.toLocaleString()}
+                        </TableCell>
+                      </Hidden>
+                      <Hidden xsDown>
+                        <TableCell align="right">
+                          {row.apr + '%'}
+                        </TableCell>
+                      </Hidden>
+                      <TableCell align="right">
                         {row.aprWeek + '%'}
                       </TableCell>
                     </TableRow>
