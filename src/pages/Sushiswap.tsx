@@ -3,9 +3,11 @@ import { Alert } from "@material-ui/lab";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import AprList from "../components/AprList";
+import AgreementNote from "../components/AgreementNote";
 import { AllState } from '../redux/All'
 import { AppState } from "../redux/App";
 import { DexState } from "../redux/Dex";
+import { AgreementActionType } from "../redux/Agreement";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,8 +35,8 @@ export default function Sushiswap() {
 
   return (
     <div>
-      <Alert severity="info">These APR does not calculate impermanent loss.</Alert>
-      
+      <AgreementNote note="This APR does not calculate impermanent loss." actionType={AgreementActionType.ACTION_IMPERLOSS} />
+
       <div className={classes.titleArea}>
         <Typography className={classes.title} variant="h6">Sushiswap</Typography>
         {lastUpdate(stateApp.lastUpdate)}

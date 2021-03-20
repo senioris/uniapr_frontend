@@ -21,7 +21,7 @@ import { Avatar, Hidden, Switch, useMediaQuery } from '@material-ui/core';
 import HomeRooter from './HomeRooter';
 import { Link } from 'react-router-dom'
 import { Link as MaterialLink } from '@material-ui/core'
-import { NightsStayTwoTone as NightsStayIcon } from '@material-ui/icons'
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 import { useDispatch, useSelector } from 'react-redux';
 import { appAction, AppActionType, AppState } from '../redux/App';
 import { AllState } from '../redux/All';
@@ -115,10 +115,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     nightIcon: {
-      width: 40,
-      height: 40,
-      paddingBottom: theme.spacing(1),
-      paddingLeft: theme.spacing(1),
+      width: 35,
+      height: 35,
     },
     donate: {
       paddingTop: theme.spacing(1),
@@ -196,7 +194,7 @@ export default function Home() {
           <div className={classes.inline}>
             <div className={classes.nightSwitch}>
               <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
-              <NightsStayIcon className={classes.nightIcon} />
+              <Brightness2Icon className={classes.nightIcon} />
             </div>
             <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
               target="_blank" rel="noopener noreferrer" className={classes.donate}>
