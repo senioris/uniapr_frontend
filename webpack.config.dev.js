@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const webpack = require('webpack')
+const CopyFilePlugin = require("copy-webpack-plugin");
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -11,21 +12,34 @@ const htmlWebpackPlugin = new HtmlWebPackPlugin({
 
 const config = {
   mode: "development",
+  devtool: "source-map",
   entry: {
-    app: [
-      "webpack-dev-server/client?http://localhost:8080",
-      "webpack/hot/dev-server",
-      path.join(CURRENT_WORKING_DIR, "/src/main.tsx"),
-    ],
+    app: [path.join(CURRENT_WORKING_DIR, "/src/main.tsx")],
   },
   output: {
     path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
-    filename: "bundle.js",
-    publicPath: "/dist/",
+    filename: "bundle.[chunkhash].js",
+    // publicPath: "/dist/",
+  },
+  devServer: {
+    contentBase: path.join(CURRENT_WORKING_DIR, "/dist/client"),
+    historyApiFallback: true,
+    port: 3355,
+    inline: true,
+    hot: true,
+    host: '0.0.0.0',
+    proxy: {
+      "/api/**": {
+        target: "http://localhost:3000",
+        secure: false,
+        logLevel: "debug",
+      },
+    },
+    // writeToDisk: true,
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-    modules: [path.resolve(__dirname, "client"), "node_modules"],
+    modules: [path.resolve(__dirname, "src"), "node_modules"],
   },
   module: {
     rules: [
@@ -45,6 +59,21 @@ const config = {
   plugins: [
     htmlWebpackPlugin,
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      debug: true,
+    }),
+    new CopyFilePlugin(
+      {
+        patterns: [
+          {
+            context: "src/assets",
+            from: "**/*.ico",
+            to: path.resolve(__dirname, "dist/client/"),
+          },
+        ],
+      },
+      { copyUnmodified: true }
+    ),
   ],
 };
 
