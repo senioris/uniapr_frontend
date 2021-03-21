@@ -8,6 +8,7 @@ import { AgreementActionType } from "../redux/Agreement";
 import { AllState } from '../redux/All'
 import { AppState } from "../redux/App";
 import { DexState } from "../redux/Dex";
+import LastUpdated from "../components/LastUpdated";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,18 +21,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const lastUpdate = (lastupdate: string) => {
-  if (lastupdate) {
-    return <Typography variant="h6">LastUpdate:{lastupdate}</Typography>
-  } else {
-    return <div/>
-  }
-}
-
 export default function Uniswap() {
   const classes = useStyles()
   const stateUni = useSelector<AllState, DexState>(state => state.uniswap)
-  const stateApp = useSelector<AllState, AppState>(state => state.app)
+  useSelector<AllState, AppState>(state => state.app)
 
   return (
     <div>
@@ -39,7 +32,7 @@ export default function Uniswap() {
 
       <div className={classes.titleArea}>
         <Typography className={classes.title} variant="h6">UniswapV2</Typography>
-        {lastUpdate(stateApp.lastUpdate)}
+        <LastUpdated />
       </div>
       <AprList name="UniswapV2" url="https://info.uniswap.org/pair/" state={stateUni} />
     </div>

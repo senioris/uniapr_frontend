@@ -15,7 +15,7 @@ const config = {
   output: {
     path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
     filename: "bundle.js",
-    publicPath: "/dist/",
+    publicPath: "/public/client/",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],

@@ -9,7 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link'
 import Paper from '@material-ui/core/Paper';
 import { ListApi } from '../api/ListApi';
@@ -109,7 +108,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     } else {
       return headCell.label
     }
-
   }
 
   const theme = useTheme();
@@ -205,7 +203,7 @@ export default function AprList(props: AprListProps) {
       ListApi.list(props.name, signal).then((data) => {
         dispatch(dexAction(props.name, { isLoaded: true, data: data }))
 
-        if (data[0].created) {
+        if (data && data.length > 0 &&  data[0].created) {
           let date = new Date(data[0].created)
           dispatch(appAction(AppActionType.ACTION_LASTUPDATE, {
             lastUpdate: date.toLocaleDateString(),

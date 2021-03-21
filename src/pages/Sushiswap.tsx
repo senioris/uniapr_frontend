@@ -8,6 +8,7 @@ import { AllState } from '../redux/All'
 import { AppState } from "../redux/App";
 import { DexState } from "../redux/Dex";
 import { AgreementActionType } from "../redux/Agreement";
+import LastUpdated from "../components/LastUpdated";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,14 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const lastUpdate = (lastupdate: string) => {
-  if (lastupdate) {
-    return <Typography variant="h6">LastUpdate:{lastupdate}</Typography>
-  } else {
-    return <div />
-  }
-}
-
 export default function Sushiswap() {
   const classes = useStyles()
   const state = useSelector<AllState, DexState>(state => state.sushiswap)
@@ -39,7 +32,7 @@ export default function Sushiswap() {
 
       <div className={classes.titleArea}>
         <Typography className={classes.title} variant="h6">Sushiswap</Typography>
-        {lastUpdate(stateApp.lastUpdate)}
+        <LastUpdated />
       </div>
       <AprList name="Sushiswap" url="https://sushiswap.vision/pair/" state={state}/>
     </div>
