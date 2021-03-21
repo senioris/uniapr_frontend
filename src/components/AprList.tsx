@@ -61,19 +61,18 @@ interface HeadCell {
   label: string;
   numeric: boolean;
   padding: boolean;
-  maxWidth: number;
   width: number | string;
   mobileDisplay: boolean;
   tip?: string;
 }
 
 const headCells: HeadCell[] = [
-  { id: "empty", numeric: false, label: '', padding: true, maxWidth: 50, width: "10%", mobileDisplay: true },
-  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false, maxWidth: 150, width: "20%", mobileDisplay: true },
-  { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true },
-  { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false },
-  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false, tip: "Calculated using 24hours volume." },
-  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true, tip: "Calculated using week volume." },
+  { id: "empty", numeric: false, label: '', padding: true, width: "10%", mobileDisplay: true },
+  { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false, width: "20%", mobileDisplay: true },
+  { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true, width: "20%", mobileDisplay: true },
+  { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true, width: "20%", mobileDisplay: false },
+  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs)', padding: true, width: "20%", mobileDisplay: false, tip: "Calculated using 24hours volume." },
+  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d)', padding: true, width: "20%", mobileDisplay: true, tip: "Calculated using week volume." },
 ];
 
 interface EnhancedTableProps {
@@ -126,7 +125,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={headCell.numeric ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
             style={{
-              maxWidth: headCell.maxWidth,
               width: headCell.width,
               display: displayProperty(isBrowser, headCell.mobileDisplay)
             }}

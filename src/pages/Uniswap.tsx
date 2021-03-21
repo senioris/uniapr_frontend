@@ -27,7 +27,7 @@ export default function Uniswap() {
   useSelector<AllState, AppState>(state => state.app)
 
   return (
-    <div>
+    <div style={{ maxWidth: "1000px", margin: "auto" }}>
       <AgreementNote note="This APR does not calculate impermanent loss." actionType={AgreementActionType.ACTION_IMPERLOSS}/>
 
       <div className={classes.titleArea}>
