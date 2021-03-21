@@ -93,7 +93,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const createLabel = (headCell: HeadCell) => {
     if (headCell.numeric) {
       return (
-        <Tooltip title={headCell.tip ? headCell.tip: ""}>
+        <Tooltip disableFocusListener title={headCell.tip ? headCell.tip: ""}>
           <TableSortLabel
             active={orderBy === headCell.id}
             direction={orderBy === headCell.id ? order : 'desc'}
