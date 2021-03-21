@@ -6,6 +6,7 @@ import * as DexRedux from './redux/Dex'
 import * as AppRedux from './redux/App'
 import * as AgreementRedux from './redux/Agreement'
 import { Provider } from 'react-redux'
+import { firebaseSetup } from './firebase/firebase'
 
 const store = Redux.createStore(Redux.combineReducers({
   uniswap: DexRedux.uniswapReducer,
@@ -16,3 +17,5 @@ const store = Redux.createStore(Redux.combineReducers({
 
 
 render(<Provider store={store}><App /></Provider>, document.getElementById('root'))
+
+firebaseSetup()

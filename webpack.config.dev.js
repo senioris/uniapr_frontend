@@ -2,6 +2,7 @@ const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const webpack = require('webpack')
 const CopyFilePlugin = require("copy-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -27,7 +28,7 @@ const config = {
     port: 3355,
     inline: true,
     hot: true,
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     proxy: {
       "/api/**": {
         target: "http://localhost:3000",
@@ -74,6 +75,7 @@ const config = {
       },
       { copyUnmodified: true }
     ),
+    new Dotenv(),
   ],
 };
 
