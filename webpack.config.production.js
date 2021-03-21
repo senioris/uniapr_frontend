@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyFilePlugin = require("copy-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 const CURRENT_WORKING_DIR = process.cwd()
 
@@ -50,6 +51,7 @@ const config = {
       },
       { copyUnmodified: true }
     ),
+    new Dotenv(),
   ],
 };
 
