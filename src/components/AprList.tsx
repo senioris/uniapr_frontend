@@ -17,7 +17,7 @@ import { dexAction, DexState } from '../redux/Dex';
 import { appAction, AppActionType, AppState } from '../redux/App'
 import { useDispatch, useSelector } from 'react-redux';
 import { AllState } from '../redux/All';
-import { Hidden, useMediaQuery, useTheme } from '@material-ui/core';
+import { Hidden, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 
 type AprListProps = {
   name: string,
@@ -63,7 +63,8 @@ interface HeadCell {
   padding: boolean;
   maxWidth: number;
   width: number | string;
-  mobileDisplay: boolean
+  mobileDisplay: boolean;
+  tip?: string;
 }
 
 const headCells: HeadCell[] = [
@@ -71,8 +72,8 @@ const headCells: HeadCell[] = [
   { id: HistorySchemaDefine.PAIR_NAME, numeric: false, label: 'Name', padding: false, maxWidth: 150, width: "20%", mobileDisplay: true },
   { id: HistorySchemaDefine.RESERVED_USD, numeric: true, label: 'Liquidity', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true },
   { id: HistorySchemaDefine.VOLUME_USD, numeric: true, label: 'Volume(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false },
-  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false },
-  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true },
+  { id: HistorySchemaDefine.APR, numeric: true, label: 'APR(24hrs)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: false, tip: "Calculated using 24hours volume." },
+  { id: HistorySchemaDefine.APR_WEEK, numeric: true, label: 'APR(7d)', padding: true, maxWidth: 100, width: "20%", mobileDisplay: true, tip: "Calculated using week volume." },
 ];
 
 interface EnhancedTableProps {
@@ -92,18 +93,20 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const createLabel = (headCell: HeadCell) => {
     if (headCell.numeric) {
       return (
-        <TableSortLabel
-          active={orderBy === headCell.id}
-          direction={orderBy === headCell.id ? order : 'desc'}
-          onClick={createSortHandler(headCell.id as keyof IHistory)}
-        >
-          {headCell.label}
-          {orderBy === headCell.id ? (
-            <span className={classes.visuallyHidden}>
-              {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-            </span>
-          ) : null}
-        </TableSortLabel>
+        <Tooltip disableFocusListener title={headCell.tip ? headCell.tip: ""}>
+          <TableSortLabel
+            active={orderBy === headCell.id}
+            direction={orderBy === headCell.id ? order : 'desc'}
+            onClick={createSortHandler(headCell.id as keyof IHistory)}
+          >
+            {headCell.label}
+            {orderBy === headCell.id ? (
+              <span className={classes.visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </span>
+            ) : null}
+          </TableSortLabel>
+        </Tooltip>
       )
     } else {
       return headCell.label
@@ -203,7 +206,7 @@ export default function AprList(props: AprListProps) {
       ListApi.list(props.name, signal).then((data) => {
         dispatch(dexAction(props.name, { isLoaded: true, data: data }))
 
-        if (data && data.length > 0 &&  data[0].created) {
+        if (data && data.length > 0 && data[0].created) {
           let date = new Date(data[0].created)
           dispatch(appAction(AppActionType.ACTION_LASTUPDATE, {
             lastUpdate: date.toLocaleDateString(),

@@ -8,7 +8,7 @@ export default function LastUpdated() {
   const stateApp = useSelector<AllState, AppState>(state => state.app)
 
   if (stateApp.lastUpdate) {
-    return <Typography variant="h6">LastUpdated:{stateApp.lastUpdate}</Typography>
+    return <Typography variant="subtitle2" style={{paddingTop: "10px"}}>LastUpdated:{stateApp.lastUpdate}</Typography>
   } else {
     return <div />
   }
