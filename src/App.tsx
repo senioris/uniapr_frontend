@@ -1,20 +1,20 @@
-import * as React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import { ThemeProvider } from '@material-ui/core/styles'
-import theme from './theme'
-import Home from './pages/Home'
-import { useSelector } from 'react-redux'
-import { AppState } from './redux/App'
-import { AllState } from './redux/All'
+import * as React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
+import Home from './pages/Home';
+import { useSelector } from 'react-redux';
+import { AppState } from './redux/App';
+import { AllState } from './redux/All';
 
-export const App = () => {
-  const stateApp = useSelector<AllState, AppState>(state => state.app)
+export const App = (): JSX.Element => {
+  const stateApp = useSelector<AllState, AppState>((state) => state.app);
 
-  return(
+  return (
     <BrowserRouter>
       <ThemeProvider theme={theme(stateApp)}>
-        <Home/>
+        <Home />
       </ThemeProvider>
     </BrowserRouter>
-  )
-}
+  );
+};

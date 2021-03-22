@@ -1,6 +1,11 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import {
+  createStyles,
+  makeStyles,
+  useTheme,
+  Theme,
+} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,12 +20,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import UniswapIcon from '../assets/uniswap-uni-logo.svg'
-import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg'
+import UniswapIcon from '../assets/uniswap-uni-logo.svg';
+import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg';
 import { Avatar, Hidden, Switch, useMediaQuery } from '@material-ui/core';
 import HomeRooter from './HomeRooter';
-import { Link } from 'react-router-dom'
-import { Link as MaterialLink } from '@material-ui/core'
+import { Link } from 'react-router-dom';
+import { Link as MaterialLink } from '@material-ui/core';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import { useDispatch, useSelector } from 'react-redux';
 import { appAction, AppActionType, AppState } from '../redux/App';
@@ -105,7 +110,7 @@ const useStyles = makeStyles((theme: Theme) =>
     bottomMenu: {
       position: 'absolute',
       bottom: 0,
-      width: drawerWidth - theme.spacing(2)
+      width: drawerWidth - theme.spacing(2),
     },
     inline: {
       display: 'flex',
@@ -123,17 +128,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     link: {
       textDecoration: 'none',
-      color: "inherit",
+      color: 'inherit',
     },
     twitter: {
       marginLeft: 20,
       width: 24,
       height: 24,
     },
-  }),
+  })
 );
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -144,74 +149,90 @@ export default function Home() {
     if (isBrowser) {
       setOpen(true);
     } else {
-      setMobileOpen(true)
+      setMobileOpen(true);
     }
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
-    setMobileOpen(false)
+    setMobileOpen(false);
   };
 
   const handleMobileDrawerClose = () => {
-    setMobileOpen(false)
+    setMobileOpen(false);
   };
 
-  const stateApp = useSelector<AllState, AppState>(state => state.app)
-  const dispatch = useDispatch()
+  const stateApp = useSelector<AllState, AppState>((state) => state.app);
+  const dispatch = useDispatch();
   const handleNightSwitchChanged = () => {
-    dispatch(appAction(AppActionType.ACTION_DARKMODE, {
-      lastUpdate: "",
-      isDark: !stateApp.isDark,
-      rowsPerPage: 0
-    }))
-  }
+    dispatch(
+      appAction(AppActionType.ACTION_DARKMODE, {
+        lastUpdate: '',
+        isDark: !stateApp.isDark,
+        rowsPerPage: 0,
+      })
+    );
+  };
 
   const drawer = () => {
-
-    const twitter =  (
-      <MaterialLink href="https://twitter.com/SeniorisCold"
-        target="_blank" rel="noopener noreferrer">
+    const twitter = (
+      <MaterialLink
+        href="https://twitter.com/SeniorisCold"
+        target="_blank"
+        rel="noopener noreferrer">
         <img src={TwitterIcon} className={classes.twitter} />
       </MaterialLink>
-    )
+    );
 
     return (
       <div>
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
         <List>
-          {['Uniswap', 'SushiSwap'].map((text, index) => (
-            drawerListItem(text)
-          ))}
+          {['Uniswap', 'SushiSwap'].map((text) => DrawerListItem(text))}
         </List>
         <div className={classes.bottomMenu}>
           {twitter}
           <div className={classes.inline}>
             <div className={classes.nightSwitch}>
-              <Switch onChange={handleNightSwitchChanged} checked={stateApp.isDark} />
+              <Switch
+                onChange={handleNightSwitchChanged}
+                checked={stateApp.isDark}
+              />
               <Brightness2Icon className={classes.nightIcon} />
             </div>
-            <MaterialLink href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
-              target="_blank" rel="noopener noreferrer" className={classes.donate}>
+            <MaterialLink
+              href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.donate}>
               Donate
             </MaterialLink>
           </div>
         </div>
       </div>
-    ) 
-  }
+    );
+  };
 
-  const drawerListItem = (name: string) => {
+  const DrawerListItem = (name: string) => {
     const classes = useStyles();
     switch (name) {
       case 'Uniswap':
         return (
-          <Link to="/uniswap" replace className={classes.link} onClick={handleMobileDrawerClose} key={name}>
+          <Link
+            to="/uniswap"
+            replace
+            className={classes.link}
+            onClick={handleMobileDrawerClose}
+            key={name}>
             <ListItem button key={name}>
               <ListItemIcon>
                 <Avatar src={UniswapIcon} className={classes.listIcon} />
@@ -219,10 +240,15 @@ export default function Home() {
               <ListItemText primary={name} />
             </ListItem>
           </Link>
-        )
+        );
       case 'SushiSwap':
         return (
-          <Link to="/sushiswap" replace className={classes.link} onClick={handleMobileDrawerClose} key={name}>
+          <Link
+            to="/sushiswap"
+            replace
+            className={classes.link}
+            onClick={handleMobileDrawerClose}
+            key={name}>
             <ListItem button key={name}>
               <ListItemIcon>
                 <Avatar src={SushiswapIcon} className={classes.listIcon} />
@@ -230,13 +256,14 @@ export default function Home() {
               <ListItemText primary={name} />
             </ListItem>
           </Link>
-        )
+        );
       default:
-        return ""
+        return '';
     }
-  }
+  };
 
-  const container = window !== undefined ? () => window.document.body : undefined;
+  const container =
+    window !== undefined ? () => window.document.body : undefined;
 
   return (
     <div className={classes.root}>
@@ -245,8 +272,7 @@ export default function Home() {
         position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
-        })}
-      >
+        })}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -255,8 +281,7 @@ export default function Home() {
             edge="start"
             className={clsx(classes.menuButton, {
               [classes.hide]: open,
-            })}
-          >
+            })}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
@@ -275,8 +300,7 @@ export default function Home() {
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
-          }}
-        >
+          }}>
           {drawer()}
         </Drawer>
       </Hidden>
@@ -292,8 +316,7 @@ export default function Home() {
               [classes.drawerOpen]: open,
               [classes.drawerClose]: !open,
             }),
-          }}
-        >
+          }}>
           {drawer()}
         </Drawer>
       </Hidden>

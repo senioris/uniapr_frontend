@@ -1,26 +1,26 @@
-const path = require('path')
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const CopyFilePlugin = require("copy-webpack-plugin");
-const Dotenv = require("dotenv-webpack");
+const path = require('path');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const CopyFilePlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
-const CURRENT_WORKING_DIR = process.cwd()
+const CURRENT_WORKING_DIR = process.cwd();
 
 const htmlWebpackPlugin = new HtmlWebPackPlugin({
-  template: "./src/index.html",
-  filename: "./index.html",
+  template: './src/index.html',
+  filename: './index.html',
 });
 
 const config = {
-  mode: "production",
-  entry: [path.join(CURRENT_WORKING_DIR, "/src/main.tsx")],
+  mode: 'production',
+  entry: [path.join(CURRENT_WORKING_DIR, '/src/main.tsx')],
   output: {
-    path: path.join(CURRENT_WORKING_DIR, "/dist/client"),
-    filename: "bundle.js",
-    publicPath: "/public/client/",
+    path: path.join(CURRENT_WORKING_DIR, '/dist/client'),
+    filename: 'bundle.js',
+    publicPath: '/public/client/',
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-    modules: [path.resolve(__dirname, "src"), "node_modules"],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
   },
   module: {
     rules: [
@@ -28,12 +28,12 @@ const config = {
         test: /\.(j|t)s(x)?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.(ttf|eot|svg|gif|jpg|png)(\?[\s\S]+)?$/,
-        use: "file-loader",
+        use: 'file-loader',
       },
     ],
   },
@@ -43,9 +43,9 @@ const config = {
       {
         patterns: [
           {
-            context: "src/assets",
-            from: "**/*.ico",
-            to: path.resolve(__dirname, "dist/client/"),
+            context: 'src/assets',
+            from: '**/*.ico',
+            to: path.resolve(__dirname, 'dist/client/'),
           },
         ],
       },
@@ -55,4 +55,4 @@ const config = {
   ],
 };
 
-module.exports = config
+module.exports = config;

@@ -22,11 +22,6 @@
     "outDir": "./dist/client",
     "rootDir": "./src"
   },
-  "include": [
-    "./**/*",
-  ],
-  "exclude": [
-    "./*.js",
-    "./dist/**/*"
-  ]
+  "include": ["./**/*"],
+  "exclude": ["./*.js", "./dist/**/*"]
 }

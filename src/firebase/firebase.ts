@@ -1,7 +1,6 @@
-import firebase from 'firebase'
+import firebase from 'firebase';
 
-export function firebaseSetup() {
-
+export function firebaseSetup(): void {
   const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -9,11 +8,10 @@ export function firebaseSetup() {
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.FIREBASE_APPID,
-    measurementId: process.env.FIREBASE_MEASUREMENT_ID
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID,
   };
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 }
-
