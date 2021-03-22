@@ -1,14 +1,14 @@
-const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const CopyFilePlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+const path = require('path')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const CopyFilePlugin = require('copy-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
-const CURRENT_WORKING_DIR = process.cwd();
+const CURRENT_WORKING_DIR = process.cwd()
 
 const htmlWebpackPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
   filename: './index.html',
-});
+})
 
 const config = {
   mode: 'production',
@@ -53,6 +53,6 @@ const config = {
     ),
     new Dotenv(),
   ],
-};
+}
 
-module.exports = config;
+module.exports = config

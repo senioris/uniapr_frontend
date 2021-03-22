@@ -1,11 +1,11 @@
 export type AgreementState = {
-  impoerLoss: boolean;
-};
+  impoerLoss: boolean
+}
 
 export type AgreementAction = {
-  type: AgreementActionType;
-  payload: AgreementState;
-};
+  type: AgreementActionType
+  payload: AgreementState
+}
 
 export enum AgreementActionType {
   ACTION_IMPERLOSS = 'AgreementActionImperLoss',
@@ -18,12 +18,12 @@ export const agreementAction = (
   return {
     type: action,
     payload: payload,
-  };
-};
+  }
+}
 
 const initialState: AgreementState = {
   impoerLoss: localStorage.getItem('imperloss') == '1' ? true : false,
-};
+}
 
 export const agreementReducer = (
   state: AgreementState = initialState,
@@ -31,14 +31,14 @@ export const agreementReducer = (
 ): AgreementState => {
   switch (action.type) {
     case AgreementActionType.ACTION_IMPERLOSS: {
-      const agreeed = action.payload.impoerLoss;
-      localStorage.setItem('imperloss', agreeed ? '1' : '0');
+      const agreeed = action.payload.impoerLoss
+      localStorage.setItem('imperloss', agreeed ? '1' : '0')
       return {
         ...state,
         impoerLoss: agreeed,
-      };
+      }
     }
     default:
-      return state;
+      return state
   }
-};
+}

@@ -1,5 +1,5 @@
-import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import { AppState } from './redux/App';
+import { createMuiTheme, Theme } from '@material-ui/core/styles'
+import { AppState } from './redux/App'
 
 declare module '@material-ui/core/styles/createPalette' {}
 
@@ -20,7 +20,7 @@ export const theme = (state: AppState): Theme => {
       },
       type: state.isDark ? 'dark' : 'light',
     },
-  });
-};
+  })
+}
 
-export default theme;
+export default theme

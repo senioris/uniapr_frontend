@@ -1,13 +1,13 @@
-import { createStyles, makeStyles, Typography } from '@material-ui/core';
-import * as React from 'react';
-import { useSelector } from 'react-redux';
-import AprList from '../components/AprList';
-import AgreementNote from '../components/AgreementNote';
-import { AgreementActionType } from '../redux/Agreement';
-import { AllState } from '../redux/All';
-import { AppState } from '../redux/App';
-import { DexState } from '../redux/Dex';
-import LastUpdated from '../components/LastUpdated';
+import { createStyles, makeStyles, Typography } from '@material-ui/core'
+import * as React from 'react'
+import { useSelector } from 'react-redux'
+import AprList from '../components/AprList'
+import AgreementNote from '../components/AgreementNote'
+import { AgreementActionType } from '../redux/Agreement'
+import { AllState } from '../redux/All'
+import { AppState } from '../redux/App'
+import { DexState } from '../redux/Dex'
+import LastUpdated from '../components/LastUpdated'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -18,12 +18,12 @@ const useStyles = makeStyles(() =>
       flexGrow: 1,
     },
   })
-);
+)
 
 export default function Uniswap(): JSX.Element {
-  const classes = useStyles();
-  const stateUni = useSelector<AllState, DexState>((state) => state.uniswap);
-  useSelector<AllState, AppState>((state) => state.app);
+  const classes = useStyles()
+  const stateUni = useSelector<AllState, DexState>((state) => state.uniswap)
+  useSelector<AllState, AppState>((state) => state.app)
 
   return (
     <div style={{ maxWidth: '1000px', margin: 'auto' }}>
@@ -44,5 +44,5 @@ export default function Uniswap(): JSX.Element {
         state={stateUni}
       />
     </div>
-  );
+  )
 }

@@ -1,40 +1,40 @@
-import * as React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import { ListApi } from '../api/ListApi';
-import { IHistory, HistorySchemaDefine } from '../commons/history.types';
-import { dexAction, DexState } from '../redux/Dex';
-import { appAction, AppActionType, AppState } from '../redux/App';
-import { useDispatch, useSelector } from 'react-redux';
-import { AllState } from '../redux/All';
-import { Hidden, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
+import * as React from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TablePagination from '@material-ui/core/TablePagination'
+import TableRow from '@material-ui/core/TableRow'
+import TableSortLabel from '@material-ui/core/TableSortLabel'
+import Link from '@material-ui/core/Link'
+import Paper from '@material-ui/core/Paper'
+import { ListApi } from '../api/ListApi'
+import { IHistory, HistorySchemaDefine } from '../commons/history.types'
+import { dexAction, DexState } from '../redux/Dex'
+import { appAction, AppActionType, AppState } from '../redux/App'
+import { useDispatch, useSelector } from 'react-redux'
+import { AllState } from '../redux/All'
+import { Hidden, Tooltip, useMediaQuery, useTheme } from '@material-ui/core'
 
 type AprListProps = {
-  name: string;
-  url: string;
-  state: DexState;
-};
+  name: string
+  url: string
+  state: DexState
+}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
-    return -1;
+    return -1
   }
   if (b[orderBy] > a[orderBy]) {
-    return 1;
+    return 1
   }
-  return 0;
+  return 0
 }
 
-type Order = 'asc' | 'desc';
+type Order = 'asc' | 'desc'
 
 function getComparator<Key extends keyof IHistory>(
   order: Order,
@@ -42,27 +42,27 @@ function getComparator<Key extends keyof IHistory>(
 ): (a: IHistory, b: IHistory) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
 function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+  const stabilizedThis = array.map((el, index) => [el, index] as [T, number])
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
+    const order = comparator(a[0], b[0])
+    if (order !== 0) return order
+    return a[1] - b[1]
+  })
+  return stabilizedThis.map((el) => el[0])
 }
 
 interface HeadCell {
-  id: keyof IHistory | string;
-  label: string;
-  numeric: boolean;
-  padding: boolean;
-  width: number | string;
-  mobileDisplay: boolean;
-  tip?: string;
+  id: keyof IHistory | string
+  label: string
+  numeric: boolean
+  padding: boolean
+  width: number | string
+  mobileDisplay: boolean
+  tip?: string
 }
 
 const headCells: HeadCell[] = [
@@ -116,26 +116,26 @@ const headCells: HeadCell[] = [
     mobileDisplay: true,
     tip: 'Calculated using week volume.',
   },
-];
+]
 
 interface EnhancedTableProps {
-  classes: ReturnType<typeof useStyles>;
+  classes: ReturnType<typeof useStyles>
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof IHistory
-  ) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
+  ) => void
+  order: Order
+  orderBy: string
+  rowCount: number
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const { classes, order, orderBy, onRequestSort } = props
   const createSortHandler = (property: keyof IHistory) => (
     event: React.MouseEvent<unknown>
   ) => {
-    onRequestSort(event, property);
-  };
+    onRequestSort(event, property)
+  }
 
   const createLabel = (headCell: HeadCell) => {
     if (headCell.numeric) {
@@ -153,14 +153,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             ) : null}
           </TableSortLabel>
         </Tooltip>
-      );
+      )
     } else {
-      return headCell.label;
+      return headCell.label
     }
-  };
+  }
 
-  const theme = useTheme();
-  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'));
+  const theme = useTheme()
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'))
 
   return (
     <TableHead>
@@ -180,16 +180,16 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         ))}
       </TableRow>
     </TableHead>
-  );
+  )
 }
 
 const displayProperty = (isBrowser: boolean, isMobile: boolean): string => {
   if (isBrowser || isMobile) {
-    return 'table-cell';
+    return 'table-cell'
   } else {
-    return 'none';
+    return 'none'
   }
-};
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -229,58 +229,58 @@ const useStyles = makeStyles((theme: Theme) =>
       whiteSpace: 'nowrap',
     },
   })
-);
+)
 
 export default function AprList(props: AprListProps): JSX.Element {
-  const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>('desc');
+  const classes = useStyles()
+  const [order, setOrder] = React.useState<Order>('desc')
   const [orderBy, setOrderBy] = React.useState<keyof IHistory>(
     HistorySchemaDefine.RESERVED_USD
-  );
-  const [page, setPage] = React.useState(0);
+  )
+  const [page, setPage] = React.useState(0)
 
-  const stateApp = useSelector<AllState, AppState>((state) => state.app);
+  const stateApp = useSelector<AllState, AppState>((state) => state.app)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   React.useEffect(() => {
-    const abortController = new AbortController();
+    const abortController = new AbortController()
     if (!props.state.isLoaded) {
-      const signal = abortController.signal;
+      const signal = abortController.signal
       ListApi.list(props.name, signal).then((data) => {
-        dispatch(dexAction(props.name, { isLoaded: true, data: data }));
+        dispatch(dexAction(props.name, { isLoaded: true, data: data }))
 
         if (data && data.length > 0 && data[0].created) {
-          const date = new Date(data[0].created);
+          const date = new Date(data[0].created)
           dispatch(
             appAction(AppActionType.ACTION_LASTUPDATE, {
               lastUpdate: date.toLocaleDateString(),
               isDark: false,
               rowsPerPage: 0,
             })
-          );
+          )
         }
-      });
+      })
     }
 
     return () => {
-      abortController.abort();
-    };
+      abortController.abort()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof IHistory
   ) => {
-    const isDesc = orderBy === property && order === 'desc';
-    setOrder(isDesc ? 'asc' : 'desc');
-    setOrderBy(property);
-  };
+    const isDesc = orderBy === property && order === 'desc'
+    setOrder(isDesc ? 'asc' : 'desc')
+    setOrderBy(property)
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+    setPage(newPage)
+  }
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -291,18 +291,18 @@ export default function AprList(props: AprListProps): JSX.Element {
         isDark: false,
         rowsPerPage: parseInt(event.target.value, 10),
       })
-    );
-    setPage(0);
-  };
-
-  if (!props.state.isLoaded) {
-    return <div />;
+    )
+    setPage(0)
   }
 
-  const rowsPerPage = stateApp.rowsPerPage;
+  if (!props.state.isLoaded) {
+    return <div />
+  }
+
+  const rowsPerPage = stateApp.rowsPerPage
   const emptyRows =
     rowsPerPage -
-    Math.min(rowsPerPage, props.state.data.length - page * rowsPerPage);
+    Math.min(rowsPerPage, props.state.data.length - page * rowsPerPage)
 
   return (
     <div className={classes.root}>
@@ -327,7 +327,7 @@ export default function AprList(props: AprListProps): JSX.Element {
               )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const baseIndex = page * rowsPerPage + 1;
+                  const baseIndex = page * rowsPerPage + 1
                   return (
                     <TableRow hover tabIndex={-1} key={row.pairName}>
                       <TableCell size="small">{baseIndex + index}</TableCell>
@@ -357,7 +357,7 @@ export default function AprList(props: AprListProps): JSX.Element {
                       </Hidden>
                       <TableCell align="right">{row.aprWeek + '%'}</TableCell>
                     </TableRow>
-                  );
+                  )
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
@@ -379,5 +379,5 @@ export default function AprList(props: AprListProps): JSX.Element {
         />
       </Paper>
     </div>
-  );
+  )
 }

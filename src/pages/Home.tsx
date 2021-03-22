@@ -1,38 +1,38 @@
-import * as React from 'react';
-import clsx from 'clsx';
+import * as React from 'react'
+import clsx from 'clsx'
 import {
   createStyles,
   makeStyles,
   useTheme,
   Theme,
-} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import UniswapIcon from '../assets/uniswap-uni-logo.svg';
-import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg';
-import { Avatar, Hidden, Switch, useMediaQuery } from '@material-ui/core';
-import HomeRooter from './HomeRooter';
-import { Link } from 'react-router-dom';
-import { Link as MaterialLink } from '@material-ui/core';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
-import { useDispatch, useSelector } from 'react-redux';
-import { appAction, AppActionType, AppState } from '../redux/App';
-import { AllState } from '../redux/All';
-import TwitterIcon from '../assets/twitter_icon.svg';
+} from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import UniswapIcon from '../assets/uniswap-uni-logo.svg'
+import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg'
+import { Avatar, Hidden, Switch, useMediaQuery } from '@material-ui/core'
+import HomeRooter from './HomeRooter'
+import { Link } from 'react-router-dom'
+import { Link as MaterialLink } from '@material-ui/core'
+import Brightness2Icon from '@material-ui/icons/Brightness2'
+import { useDispatch, useSelector } from 'react-redux'
+import { appAction, AppActionType, AppState } from '../redux/App'
+import { AllState } from '../redux/All'
+import TwitterIcon from '../assets/twitter_icon.svg'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -136,34 +136,34 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 24,
     },
   })
-);
+)
 
 export default function Home(): JSX.Element {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'));
+  const classes = useStyles()
+  const theme = useTheme()
+  const [open, setOpen] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'))
 
   const handleDrawerOpen = () => {
     if (isBrowser) {
-      setOpen(true);
+      setOpen(true)
     } else {
-      setMobileOpen(true);
+      setMobileOpen(true)
     }
-  };
+  }
 
   const handleDrawerClose = () => {
-    setOpen(false);
-    setMobileOpen(false);
-  };
+    setOpen(false)
+    setMobileOpen(false)
+  }
 
   const handleMobileDrawerClose = () => {
-    setMobileOpen(false);
-  };
+    setMobileOpen(false)
+  }
 
-  const stateApp = useSelector<AllState, AppState>((state) => state.app);
-  const dispatch = useDispatch();
+  const stateApp = useSelector<AllState, AppState>((state) => state.app)
+  const dispatch = useDispatch()
   const handleNightSwitchChanged = () => {
     dispatch(
       appAction(AppActionType.ACTION_DARKMODE, {
@@ -171,8 +171,8 @@ export default function Home(): JSX.Element {
         isDark: !stateApp.isDark,
         rowsPerPage: 0,
       })
-    );
-  };
+    )
+  }
 
   const drawer = () => {
     const twitter = (
@@ -182,7 +182,7 @@ export default function Home(): JSX.Element {
         rel="noopener noreferrer">
         <img src={TwitterIcon} className={classes.twitter} />
       </MaterialLink>
-    );
+    )
 
     return (
       <div>
@@ -219,11 +219,11 @@ export default function Home(): JSX.Element {
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const DrawerListItem = (name: string) => {
-    const classes = useStyles();
+    const classes = useStyles()
     switch (name) {
       case 'Uniswap':
         return (
@@ -240,7 +240,7 @@ export default function Home(): JSX.Element {
               <ListItemText primary={name} />
             </ListItem>
           </Link>
-        );
+        )
       case 'SushiSwap':
         return (
           <Link
@@ -256,14 +256,14 @@ export default function Home(): JSX.Element {
               <ListItemText primary={name} />
             </ListItem>
           </Link>
-        );
+        )
       default:
-        return '';
+        return ''
     }
-  };
+  }
 
   const container =
-    window !== undefined ? () => window.document.body : undefined;
+    window !== undefined ? () => window.document.body : undefined
 
   return (
     <div className={classes.root}>
@@ -325,5 +325,5 @@ export default function Home(): JSX.Element {
         <HomeRooter />
       </main>
     </div>
-  );
+  )
 }

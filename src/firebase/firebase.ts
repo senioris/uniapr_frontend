@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase'
 
 export function firebaseSetup(): void {
   const firebaseConfig = {
@@ -9,9 +9,9 @@ export function firebaseSetup(): void {
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.FIREBASE_APPID,
     measurementId: process.env.FIREBASE_MEASUREMENT_ID,
-  };
+  }
 
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
+  firebase.initializeApp(firebaseConfig)
+  firebase.analytics()
 }

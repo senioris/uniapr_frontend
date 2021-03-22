@@ -1,13 +1,13 @@
 export type AppState = {
-  isDark: boolean;
-  rowsPerPage: number;
-  lastUpdate: string;
-};
+  isDark: boolean
+  rowsPerPage: number
+  lastUpdate: string
+}
 
 export type AppAction = {
-  type: AppActionType;
-  payload: AppState;
-};
+  type: AppActionType
+  payload: AppState
+}
 
 export enum AppActionType {
   ACTION_DARKMODE = 'AppActionDarkMode',
@@ -22,8 +22,8 @@ export const appAction = (
   return {
     type: action,
     payload: payload,
-  };
-};
+  }
+}
 
 const initialState: AppState = {
   isDark: localStorage.getItem('darkmode') == '1' ? true : false,
@@ -32,7 +32,7 @@ const initialState: AppState = {
       ? Number(localStorage.getItem('rowsPerPage'))
       : 5,
   lastUpdate: '',
-};
+}
 
 export const appReducer = (
   state: AppState = initialState,
@@ -40,25 +40,25 @@ export const appReducer = (
 ): AppState => {
   switch (action.type) {
     case AppActionType.ACTION_DARKMODE: {
-      const isDark = action.payload.isDark;
-      localStorage.setItem('darkmode', isDark ? '1' : '0');
+      const isDark = action.payload.isDark
+      localStorage.setItem('darkmode', isDark ? '1' : '0')
       return {
         ...state,
         isDark: isDark,
-      };
+      }
     }
     case AppActionType.ACTION_LASTUPDATE:
       return {
         ...state,
         lastUpdate: action.payload.lastUpdate,
-      };
+      }
     case AppActionType.ACTION_ROWPERPAGE:
-      localStorage.setItem('rowsPerPage', String(action.payload.rowsPerPage));
+      localStorage.setItem('rowsPerPage', String(action.payload.rowsPerPage))
       return {
         ...state,
         rowsPerPage: action.payload.rowsPerPage,
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}

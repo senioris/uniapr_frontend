@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import Uniswap from './Uniswap';
-import Sushiswap from './Sushiswap';
+import * as React from 'react'
+import { Redirect, Route } from 'react-router-dom'
+import Uniswap from './Uniswap'
+import Sushiswap from './Sushiswap'
 
 const HomeRouter = (): JSX.Element => {
   return (
@@ -12,7 +12,7 @@ const HomeRouter = (): JSX.Element => {
         <Redirect to="/uniswap" />
       </Route>
     </div>
-  );
-};
+  )
+}
 
-export default HomeRouter;
+export default HomeRouter
