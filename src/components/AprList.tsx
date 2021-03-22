@@ -355,7 +355,7 @@ export default function AprList(props: AprListProps): JSX.Element {
                       <Hidden xsDown>
                         <TableCell align="right">{row.apr + '%'}</TableCell>
                       </Hidden>
-                      <TableCell align="right">{row.aprWeek + '%'}</TableCell>
+                      <TableCell align="right">{row.aprWeek >= 0 ? row.aprWeek + '%' : "-"}</TableCell>
                     </TableRow>
                   )
                 })}
