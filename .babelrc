@@ -1,18 +1,21 @@
 {
-    "presets": [
-      ["@babel/preset-env", {
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
         "useBuiltIns": "usage",
         "corejs": 3
-      }], 
-      "@babel/preset-react",
-      "@babel/preset-typescript"
+      }
     ],
-    "plugins": [
-      [
-        "@babel/plugin-transform-typescript",
-        {
-          "allowNamespaces": true
-        }
-      ]
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-typescript",
+      {
+        "allowNamespaces": true
+      }
     ]
+  ]
 }

@@ -1,15 +1,15 @@
-import { IHistory } from "../commons/history.types"
+import { IHistory } from '../commons/history.types'
 
 export class ListApi {
-  static async list(name: string, signal: AbortSignal) : Promise<IHistory[]> {
+  static async list(name: string, signal: AbortSignal): Promise<IHistory[]> {
     try {
-      let response = await fetch('/api/history?' + "name=" + name, {
-        signal: signal
+      const response = await fetch('/api/history?' + 'name=' + name, {
+        signal: signal,
       })
 
       if (!response.ok) {
         console.log(response.status)
-        throw new Error("fetch error")
+        throw new Error('fetch error')
       }
 
       console.log(response)

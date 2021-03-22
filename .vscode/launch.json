@@ -14,7 +14,7 @@
       "webRoot": "${workspaceFolder}/dist/client",
       "sourceMapPathOverrides": {
         "webpack://uniapr_frontend/./*": "${workspaceFolder}/*"
-      },
+      }
     }
   ]
 }

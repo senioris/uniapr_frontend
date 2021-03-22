@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux'
 import { AppState } from './redux/App'
 import { AllState } from './redux/All'
 
-export const App = () => {
-  const stateApp = useSelector<AllState, AppState>(state => state.app)
+export const App = (): JSX.Element => {
+  const stateApp = useSelector<AllState, AppState>((state) => state.app)
 
-  return(
+  return (
     <BrowserRouter>
       <ThemeProvider theme={theme(stateApp)}>
-        <Home/>
+        <Home />
       </ThemeProvider>
     </BrowserRouter>
   )

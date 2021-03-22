@@ -8,14 +8,20 @@ import * as AgreementRedux from './redux/Agreement'
 import { Provider } from 'react-redux'
 import { firebaseSetup } from './firebase/firebase'
 
-const store = Redux.createStore(Redux.combineReducers({
-  uniswap: DexRedux.uniswapReducer,
-  sushiswap: DexRedux.sushiswapReducer,
-  app: AppRedux.appReducer,
-  agreement: AgreementRedux.agreementReducer
-}))
+const store = Redux.createStore(
+  Redux.combineReducers({
+    uniswap: DexRedux.uniswapReducer,
+    sushiswap: DexRedux.sushiswapReducer,
+    app: AppRedux.appReducer,
+    agreement: AgreementRedux.agreementReducer,
+  })
+)
 
-
-render(<Provider store={store}><App /></Provider>, document.getElementById('root'))
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
 
 firebaseSetup()
