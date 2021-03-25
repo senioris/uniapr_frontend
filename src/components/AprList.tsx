@@ -17,6 +17,8 @@ import { appAction, AppActionType, AppState } from '../redux/App'
 import { useDispatch, useSelector } from 'react-redux'
 import { AllState } from '../redux/All'
 import { Hidden, Tooltip, useMediaQuery, useTheme } from '@material-ui/core'
+import TimelineIcon from '@material-ui/icons/Timeline'
+import { Link as RouterLink } from 'react-router-dom'
 
 type AprListProps = {
   name: string
@@ -115,6 +117,14 @@ const headCells: HeadCell[] = [
     width: '20%',
     mobileDisplay: true,
     tip: 'Calculated using week volume.',
+  },
+  {
+    id: 'chart',
+    numeric: false,
+    label: '',
+    padding: false,
+    width: '10%',
+    mobileDisplay: true,
   },
 ]
 
@@ -355,7 +365,16 @@ export default function AprList(props: AprListProps): JSX.Element {
                       <Hidden xsDown>
                         <TableCell align="right">{row.apr + '%'}</TableCell>
                       </Hidden>
-                      <TableCell align="right">{row.aprWeek >= 0 ? row.aprWeek + '%' : "-"}</TableCell>
+                      <TableCell align="right">
+                        {row.aprWeek >= 0 ? row.aprWeek + '%' : '-'}
+                      </TableCell>
+                      <TableCell size="small">
+                        <RouterLink
+                          to={'/chart/' + row.pairId}
+                          key={row.pairId}>
+                          <TimelineIcon />
+                        </RouterLink>
+                      </TableCell>
                     </TableRow>
                   )
                 })}

@@ -139,7 +139,7 @@ const useStyles = makeStyles((theme: Theme) =>
     logo: {
       width: 36,
       height: 36,
-      marginRight: "4px"
+      marginRight: '4px',
     },
   })
 )
