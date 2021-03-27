@@ -17,6 +17,8 @@ import { appAction, AppActionType, AppState } from '../redux/App'
 import { useDispatch, useSelector } from 'react-redux'
 import { AllState } from '../redux/All'
 import { Hidden, Tooltip, useMediaQuery, useTheme } from '@material-ui/core'
+import TimelineIcon from '@material-ui/icons/Timeline'
+import { Link as RouterLink } from 'react-router-dom'
 
 type AprListProps = {
   name: string
@@ -115,6 +117,14 @@ const headCells: HeadCell[] = [
     width: '20%',
     mobileDisplay: true,
     tip: 'Calculated using week volume.',
+  },
+  {
+    id: 'chart',
+    numeric: false,
+    label: '',
+    padding: false,
+    width: '10%',
+    mobileDisplay: false,
   },
 ]
 
@@ -233,6 +243,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function AprList(props: AprListProps): JSX.Element {
   const classes = useStyles()
+  const theme = useTheme()
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'))
   const [order, setOrder] = React.useState<Order>('desc')
   const [orderBy, setOrderBy] = React.useState<keyof IHistory>(
     HistorySchemaDefine.RESERVED_USD
@@ -355,7 +367,30 @@ export default function AprList(props: AprListProps): JSX.Element {
                       <Hidden xsDown>
                         <TableCell align="right">{row.apr + '%'}</TableCell>
                       </Hidden>
-                      <TableCell align="right">{row.aprWeek >= 0 ? row.aprWeek + '%' : "-"}</TableCell>
+                      <TableCell align="right">
+                        {(() => {
+                          if (isBrowser) {
+                            return row.aprWeek >= 0 ? row.aprWeek + '%' : '-'
+                          } else {
+                            return (
+                              <RouterLink
+                                to={'/chart/' + row.pairId}
+                                key={row.pairId}>
+                                {row.aprWeek >= 0 ? row.aprWeek + '%' : '-'}
+                              </RouterLink>
+                            )
+                          }
+                        })()}
+                      </TableCell>
+                      <Hidden xsDown>
+                        <TableCell size="small">
+                          <RouterLink
+                            to={'/chart/' + row.pairId}
+                            key={row.pairId}>
+                            <TimelineIcon />
+                          </RouterLink>
+                        </TableCell>
+                      </Hidden>
                     </TableRow>
                   )
                 })}

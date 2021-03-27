@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { appAction, AppActionType, AppState } from '../redux/App'
 import { AllState } from '../redux/All'
 import TwitterIcon from '../assets/twitter_icon.svg'
+import LogoIcon from '../assets/logo.svg'
 
 const drawerWidth = 240
 
@@ -134,6 +135,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 20,
       width: 24,
       height: 24,
+    },
+    logo: {
+      width: 36,
+      height: 36,
+      marginRight: '4px',
     },
   })
 )
@@ -284,6 +290,7 @@ export default function Home(): JSX.Element {
             })}>
             <MenuIcon />
           </IconButton>
+          <img src={LogoIcon} className={classes.logo} />
           <Typography variant="h6" noWrap className={classes.title}>
             AMM DEX APR
           </Typography>
