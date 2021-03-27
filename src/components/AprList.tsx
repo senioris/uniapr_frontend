@@ -124,7 +124,7 @@ const headCells: HeadCell[] = [
     label: '',
     padding: false,
     width: '10%',
-    mobileDisplay: true,
+    mobileDisplay: false,
   },
 ]
 
@@ -243,6 +243,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function AprList(props: AprListProps): JSX.Element {
   const classes = useStyles()
+  const theme = useTheme()
+  const isBrowser = useMediaQuery(theme.breakpoints.up('sm'))
   const [order, setOrder] = React.useState<Order>('desc')
   const [orderBy, setOrderBy] = React.useState<keyof IHistory>(
     HistorySchemaDefine.RESERVED_USD
@@ -366,15 +368,29 @@ export default function AprList(props: AprListProps): JSX.Element {
                         <TableCell align="right">{row.apr + '%'}</TableCell>
                       </Hidden>
                       <TableCell align="right">
-                        {row.aprWeek >= 0 ? row.aprWeek + '%' : '-'}
+                        {(() => {
+                          if (isBrowser) {
+                            return row.aprWeek >= 0 ? row.aprWeek + '%' : '-'
+                          } else {
+                            return (
+                              <RouterLink
+                                to={'/chart/' + row.pairId}
+                                key={row.pairId}>
+                                {row.aprWeek >= 0 ? row.aprWeek + '%' : '-'}
+                              </RouterLink>
+                            )
+                          }
+                        })()}
                       </TableCell>
-                      <TableCell size="small">
-                        <RouterLink
-                          to={'/chart/' + row.pairId}
-                          key={row.pairId}>
-                          <TimelineIcon />
-                        </RouterLink>
-                      </TableCell>
+                      <Hidden xsDown>
+                        <TableCell size="small">
+                          <RouterLink
+                            to={'/chart/' + row.pairId}
+                            key={row.pairId}>
+                            <TimelineIcon />
+                          </RouterLink>
+                        </TableCell>
+                      </Hidden>
                     </TableRow>
                   )
                 })}

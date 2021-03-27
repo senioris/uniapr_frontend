@@ -1,4 +1,4 @@
-import { Paper } from '@material-ui/core'
+import { createStyles, makeStyles, Paper, Theme } from '@material-ui/core'
 import * as React from 'react'
 import ReactApexChart, { Props as ApexChartProps } from 'react-apexcharts'
 import { useSelector } from 'react-redux'
@@ -11,6 +11,14 @@ import { AppState } from '../redux/App'
 type Params = {
   id: string
 }
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paper: {
+      padding: theme.spacing(1),
+    },
+  })
+)
 
 const chartData = (
   props: ApexChartProps,
@@ -27,7 +35,7 @@ const chartData = (
     options: {
       ...props.options,
       title: {
-        text: histories[0].pairName,
+        text: histories[0].pairName + ' APR',
         align: 'center',
         style: {
           fontSize: '20px',
@@ -47,6 +55,11 @@ const chartData = (
 
           return '-'
         }),
+        labels: {
+          style: {
+            fontFamily: "'Roboto', sans-serif",
+          },
+        },
       },
     },
   }
@@ -66,6 +79,7 @@ const themeData = (props: ApexChartProps, isDark: boolean): ApexChartProps => {
 }
 
 export default function AprChart(): JSX.Element {
+  const classes = useStyles()
   const stateApp = useSelector<AllState, AppState>((state) => state.app)
 
   const [data, setData] = React.useState<IHistory[]>([])
@@ -75,7 +89,7 @@ export default function AprChart(): JSX.Element {
     series: [],
     options: {
       chart: {
-        height: 400,
+        height: 500,
         type: 'line',
         background: 'transparent',
         zoom: {
@@ -101,11 +115,15 @@ export default function AprChart(): JSX.Element {
           opacity: 0.5,
         },
       },
-      xaxis: {
-        categories: [],
-      },
       theme: {
         mode: 'light',
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontFamily: "'Roboto', sans-serif",
+          },
+        },
       },
     },
   })
@@ -135,7 +153,7 @@ export default function AprChart(): JSX.Element {
 
   return (
     <div>
-      <Paper>
+      <Paper className={classes.paper}>
         <ReactApexChart
           options={chart.options}
           series={chart.series}
