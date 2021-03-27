@@ -50,7 +50,7 @@ const chartData = (
         categories: histories.map((data) => {
           if (data && data.created) {
             const date = new Date(data.created)
-            return date.getMonth() + '/' + date.getDay()
+            return (date.getMonth()+1)  + '/' + date.getDate()
           }
 
           return '-'
