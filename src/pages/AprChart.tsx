@@ -10,6 +10,7 @@ import { AppState } from '../redux/App'
 
 type Params = {
   id: string
+  rate: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,19 +24,22 @@ const useStyles = makeStyles((theme: Theme) =>
 const chartData = (
   props: ApexChartProps,
   histories: IHistory[],
-  stateApp: AppState
+  stateApp: AppState,
+  rate: string
 ): ApexChartProps => {
   return {
     series: [
       {
         name: 'APR',
-        data: histories.map((data) => data.apr),
+        data: histories.map((data) =>
+          effectImpermanentLoss(data.apr, Number(rate))
+        ),
       },
     ],
     options: {
       ...props.options,
       title: {
-        text: histories[0].pairName + ' APR',
+        text: histories[0].pairName + ' APR (' + rate + 'x price change)',
         align: 'center',
         style: {
           fontSize: '20px',
@@ -50,7 +54,7 @@ const chartData = (
         categories: histories.map((data) => {
           if (data && data.created) {
             const date = new Date(data.created)
-            return (date.getMonth()+1)  + '/' + date.getDate()
+            return date.getMonth() + 1 + '/' + date.getDate()
           }
 
           return '-'
@@ -63,6 +67,14 @@ const chartData = (
       },
     },
   }
+}
+
+const effectImpermanentLoss = (apr: number, changeRate: number): number => {
+  return Number(
+    (apr + ((2 * Math.sqrt(changeRate)) / (1 + changeRate) - 1) * 100).toFixed(
+      2
+    )
+  )
 }
 
 const themeData = (props: ApexChartProps, isDark: boolean): ApexChartProps => {
@@ -134,7 +146,7 @@ export default function AprChart(): JSX.Element {
     ListApi.history(params.id, signal).then((histories) => {
       setData(histories)
 
-      setChart(chartData(chart, histories, stateApp))
+      setChart(chartData(chart, histories, stateApp, params.rate))
     })
 
     return () => {

@@ -20,6 +20,15 @@ export const theme = (state: AppState): Theme => {
       },
       type: state.isDark ? 'dark' : 'light',
     },
+    overrides: {
+      MuiSelect: {
+        select: {
+          '&:focus': {
+            backgroundColor: 'transparent',
+          },
+        },
+      },
+    },
   })
 }
 
