@@ -9,7 +9,7 @@ const HomeRouter = (): JSX.Element => {
     <div>
       <Route path="/uniswap" component={Uniswap} />
       <Route path="/sushiswap" component={Sushiswap} />
-      <Route path="/chart/:id" component={AprChart} />
+      <Route path="/chart/:id/:rate" component={AprChart} />
       <Route>
         <Redirect to="/uniswap" />
       </Route>
