@@ -110,3 +110,35 @@ export const quickswapReducer = (
       return state
   }
 }
+
+const initialSushiMaticState = {
+  isLoaded: false,
+  data: [] as IHistory[],
+  changeRate:
+    Number(localStorage.getItem('Sushiswap(matic).rate')) >= 1
+      ? Number(localStorage.getItem('Sushiswap(matic).rate'))
+      : 1,
+}
+
+export const sushiswapMaticReducer = (
+  state: DexState = initialSushiMaticState,
+  action: DexAction
+): DexState => {
+  switch (action.type) {
+    case 'Sushiswap(matic)':
+      return {
+        ...state,
+        isLoaded: true,
+        data: action.payload.data,
+      }
+    case 'Sushiswap(matic).rate':
+      localStorage.setItem('Sushiswap(matic).rate', String(action.payload.changeRate))
+      return {
+        ...state,
+        changeRate: action.payload.changeRate,
+      }
+    default:
+      return state
+  }
+}
+

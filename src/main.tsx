@@ -13,6 +13,7 @@ const store = Redux.createStore(
     uniswap: DexRedux.uniswapReducer,
     sushiswap: DexRedux.sushiswapReducer,
     quickswap: DexRedux.quickswapReducer,
+    sushiswap_matic: DexRedux.sushiswapMaticReducer,
     app: AppRedux.appReducer,
     agreement: AgreementRedux.agreementReducer,
   })

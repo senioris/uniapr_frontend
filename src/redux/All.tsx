@@ -6,6 +6,7 @@ export type AllState = {
   uniswap: DexState
   sushiswap: DexState
   quickswap: DexState
+  sushiswap_matic: DexState
   app: AppState
   agreement: AgreementState
 }
