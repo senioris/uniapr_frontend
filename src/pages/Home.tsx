@@ -22,6 +22,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import UniswapIcon from '../assets/uniswap-uni-logo.svg'
 import SushiswapIcon from '../assets/sushiswap-sushi-logo.svg'
+import QuickswapIcon from '../assets/quickswap-quick-logo.svg'
 import { Avatar, Hidden, Switch, useMediaQuery } from '@material-ui/core'
 import HomeRooter from './HomeRooter'
 import { Link } from 'react-router-dom'
@@ -203,7 +204,7 @@ export default function Home(): JSX.Element {
         </div>
         <Divider />
         <List>
-          {['Uniswap', 'SushiSwap'].map((text) => DrawerListItem(text))}
+          {['Uniswap', 'SushiSwap', 'QuickSwap'].map((text) => DrawerListItem(text))}
         </List>
         <div className={classes.bottomMenu}>
           {twitter}
@@ -258,6 +259,22 @@ export default function Home(): JSX.Element {
             <ListItem button key={name}>
               <ListItemIcon>
                 <Avatar src={SushiswapIcon} className={classes.listIcon} />
+              </ListItemIcon>
+              <ListItemText primary={name} />
+            </ListItem>
+          </Link>
+        )
+      case 'QuickSwap':
+        return (
+          <Link
+            to="/quickswap"
+            replace
+            className={classes.link}
+            onClick={handleMobileDrawerClose}
+            key={name}>
+            <ListItem button key={name}>
+              <ListItemIcon>
+                <Avatar src={QuickswapIcon} className={classes.listIcon} />
               </ListItemIcon>
               <ListItemText primary={name} />
             </ListItem>
