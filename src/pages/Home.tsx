@@ -204,7 +204,7 @@ export default function Home(): JSX.Element {
         </div>
         <Divider />
         <List>
-          {['Uniswap', 'SushiSwap', 'QuickSwap'].map((text) => DrawerListItem(text))}
+          {['Uniswap', 'SushiSwap', 'SushiSwap(Matic)', 'QuickSwap'].map((text) => DrawerListItem(text))}
         </List>
         <div className={classes.bottomMenu}>
           {twitter}
@@ -275,6 +275,22 @@ export default function Home(): JSX.Element {
             <ListItem button key={name}>
               <ListItemIcon>
                 <Avatar src={QuickswapIcon} className={classes.listIcon} />
+              </ListItemIcon>
+              <ListItemText primary={name} />
+            </ListItem>
+          </Link>
+        )
+      case 'SushiSwap(Matic)':
+        return (
+          <Link
+            to="/sushiswap_matic"
+            replace
+            className={classes.link}
+            onClick={handleMobileDrawerClose}
+            key={name}>
+            <ListItem button key={name}>
+              <ListItemIcon>
+                <Avatar src={SushiswapIcon} className={classes.listIcon} />
               </ListItemIcon>
               <ListItemText primary={name} />
             </ListItem>

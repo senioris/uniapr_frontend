@@ -4,6 +4,7 @@ import Uniswap from './Uniswap'
 import Sushiswap from './Sushiswap'
 import AprChart from './AprChart'
 import Quickswap from './Quickswap'
+import SushiswapMatic from './SushiswapMatic'
 
 const HomeRouter = (): JSX.Element => {
   return (
@@ -11,6 +12,7 @@ const HomeRouter = (): JSX.Element => {
       <Route path="/uniswap" component={Uniswap} />
       <Route path="/sushiswap" component={Sushiswap} />
       <Route path="/quickswap" component={Quickswap} />
+      <Route path="/sushiswap_matic" component={SushiswapMatic} />
       <Route path="/chart/:id/:rate" component={AprChart} />
       <Route>
         <Redirect to="/uniswap" />
