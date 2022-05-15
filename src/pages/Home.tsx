@@ -216,13 +216,6 @@ export default function Home(): JSX.Element {
               />
               <Brightness2Icon className={classes.nightIcon} />
             </div>
-            <MaterialLink
-              href="https://etherscan.io/address/0x3Ca7C3846B4eBA9e041733514E9D31c7AfbdfbDc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.donate}>
-              Donate
-            </MaterialLink>
           </div>
         </div>
       </div>
